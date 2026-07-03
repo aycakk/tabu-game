@@ -9,11 +9,13 @@ Sıralı — her sprint bir öncekine dayanır. Tek geliştirici için milestone
 ## Sprint 0 — İskelet & temel
 Hedef: derlenen boş kabuk + tüm veri ve tema hazır.
 
-- [ ] Xcode projesi: iOS 16+, SwiftUI, SwiftData; klasör yapısı.
-- [ ] Fontlar (Fredoka, Nunito) + `Color+Hex` + `AppTheme` (palet, gradyan, tipografi).
-- [ ] Modeller: `WordCard`, `Team`, `GameSettings`, `GamePhase`, `RoundResult`.
-- [ ] `deck_tr.json` (≥50 kart) + `DeckProviding` + `BundledDeckProvider`.
-- [ ] `Haptics` + boş `RootView`.
+- [x] Xcode projesi: iOS 26+ (26.4), SwiftUI, SwiftData; klasör yapısı.
+- [x] Fontlar (Fredoka, Nunito Sans) + `Color+Hex` + `AppTheme` (palet, gradyan, tipografi).
+- [x] Modeller: `WordCard`, `Team`, `GameSettings`, `GamePhase`, `RoundResult`.
+- [x] `deck_tr.json` (10 kartla başlandı; ≥50'ye genişletme kullanıcıda) + `DeckProviding` + `BundledDeckProvider`.
+- [x] `Haptics` + boş `RootView`.
+
+> Sprint 0 kararları: deployment target 26.4 · bundle ID `com.aycakayacali.tabu` (personal team) · MVP light-only · palet ve tipografi `docs/Tabu Akış.html` mockup'ından (`AppTheme.swift`).
 
 ## Sprint 1 — Oyun motoru
 Hedef: UI olmadan, testle doğrulanmış çekirdek mantık.

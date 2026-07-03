@@ -12,7 +12,8 @@ SwiftUI + MVVM + SwiftData ile, tek cihazda sırayla oynanan (pass-and-play) Tü
 - Beraberlikte **tek ani ölüm turu**; eşitlik bozulana dek tekrarlanır.
 - **SwiftData** MVP'de hafif kullanılır: son ayarlar + maç geçmişi. Özel desteler v2'de aynı katmana eklenir.
 - Tek `GameViewModel` (kurulum + oyun birlikte).
-- Hedef: iOS 16+, dikey (portrait), iPhone. Üçüncü parti bağımlılık yok.
+- Hedef: iOS 26+ (deployment target 26.4), dikey (portrait), iPhone-only. Üçüncü parti bağımlılık yok.
+- Bundle ID: `com.aycakayacali.tabu`, personal team imzalama (App Store öncesi gözden geçirilecek).
 
 ---
 
@@ -57,8 +58,11 @@ Tabu/
 │  ├─ AppTheme.swift             // renk + gradyan + tipografi token
 │  └─ Color+Hex.swift
 └─ Resources/
-   └─ deck_tr.json
+   ├─ deck_tr.json
+   └─ Fonts/                     // Fredoka + Nunito Sans (SIL OFL, statik ağırlıklar)
 ```
+
+Not: `Info.plist` xcodeproj yanında açık dosya olarak durur (`UIAppFonts` için; kalan key'ler `GENERATE_INFOPLIST_FILE` ile üretilir).
 
 ---
 
@@ -100,6 +104,28 @@ Timer ve aktif kart/sayaç state'i bu sınıfta yaşar.
 Views "aptal" katmandır: aksiyon yollar, state çizer. Theme renk/gradyan/tipografi token'larını tutar.
 
 ---
+
+## Tasarım sistemi
+
+Kaynak: `docs/Tabu Akış.html` mockup'ı; token'lar `Theme/AppTheme.swift` içinde.
+
+- **Fontlar:** Fredoka (SemiBold/Bold — başlık, buton, skor) + Nunito Sans (SemiBold/Bold/ExtraBold/Black — gövde, etiket).
+- **Palet:** pageBg `#E7E5DF` · surface `#F4F5FB` · textPrimary `#1F2937` · textMuted `#6B7280` · accent `#00C2A8` · success `#16A34A` · warning `#F59E0B` · danger `#EF4444`.
+- **Marka gradyanı:** `#FF2D78 → #FF7A1A → #FFC53D` (135°).
+- **Takım swatch'ları (6):** `#FF5A5F` `#00C2A8` `#7C5CFF` `#FFB400` `#19A7FF` `#FF4FA3`. Tur ekranı arka planı takım renginden ×0.58 koyulaştırmayla türetilir.
+- **Köşeler:** kart 28 · buton 22 · tile 18 · chip 14.
+- MVP light-only; dark mode v2.
+
+## Deste JSON şeması
+
+```json
+{ "version": 1, "language": "tr",
+  "cards": [
+    { "word": "Plaj", "forbidden": ["Kum", "Deniz", "Güneş", "Şemsiye", "Tatil"] }
+  ]}
+```
+
+Kart `id`'si JSON'da tutulmaz; decode sırasında üretilir. Yasak kelime sayısı 5 sabittir. MVP 10 kartla başlar; içerik genişletme kullanıcıda.
 
 ## SwiftData şeması
 
