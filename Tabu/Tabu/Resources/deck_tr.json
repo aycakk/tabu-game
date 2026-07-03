@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "language": "tr",
+  "cards": [
+    { "word": "Plaj", "forbidden": ["Kum", "Deniz", "Güneş", "Şemsiye", "Tatil"] },
+    { "word": "Doktor", "forbidden": ["Hastane", "Hasta", "Muayene", "Reçete", "İğne"] },
+    { "word": "Futbol", "forbidden": ["Top", "Gol", "Saha", "Takım", "Maç"] },
+    { "word": "Çay", "forbidden": ["Bardak", "Demlik", "Sıcak", "İçecek", "Kahvaltı"] },
+    { "word": "Kedi", "forbidden": ["Miyav", "Evcil", "Hayvan", "Fare", "Tüy"] },
+    { "word": "Uçak", "forbidden": ["Havaalanı", "Pilot", "Kanat", "Uçmak", "Yolcu"] },
+    { "word": "Öğretmen", "forbidden": ["Okul", "Ders", "Öğrenci", "Sınıf", "Tahta"] },
+    { "word": "Dondurma", "forbidden": ["Soğuk", "Yaz", "Külah", "Çikolata", "Erimek"] },
+    { "word": "Ay", "forbidden": ["Gökyüzü", "Gece", "Dünya", "Yıldız", "Dolunay"] },
+    { "word": "Düğün", "forbidden": ["Gelin", "Damat", "Evlilik", "Dans", "Davetli"] }
+  ]
+}
