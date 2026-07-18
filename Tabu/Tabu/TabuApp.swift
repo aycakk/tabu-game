@@ -1,10 +1,12 @@
 import SwiftUI
+import SwiftData
 
 @main
 struct TabuApp: App {
     var body: some Scene {
         WindowGroup {
-            Text("Tabu")
+            RootView()
         }
+        .modelContainer(for: [SettingsRecord.self, MatchResult.self])
     }
 }
