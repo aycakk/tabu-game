@@ -20,12 +20,12 @@ Hedef: derlenen boş kabuk + tüm veri ve tema hazır.
 ## Sprint 1 — Oyun motoru
 Hedef: UI olmadan, testle doğrulanmış çekirdek mantık.
 
-- [ ] `GameViewModel`: state + `startNewGame` / `startRound`.
-- [ ] `drawCard`, `markCorrect` / `pass` / `markTaboo` (pas limiti).
-- [ ] Timer + `endRound` + skorlama (eksiye düşebilir).
-- [ ] Sıra döndürme + 2N tur bitişi + kazanan.
-- [ ] Ani ölüm mod bayrağı (eşitlik bozulana dek).
-- [ ] Unit testler: skorlama, tur bitişi, beraberlik.
+- [x] `GameViewModel`: state + `startNewGame` / `startRound`.
+- [x] `drawCard`, `markCorrect` / `pass` / `markTaboo` (pas limiti).
+- [x] Timer + `endRound` + skorlama (eksiye düşebilir).
+- [x] Sıra döndürme + 2N tur bitişi + kazanan.
+- [x] Ani ölüm mod bayrağı (eşitlik bozulana dek).
+- [x] Unit testler: skorlama, tur bitişi, beraberlik.
 
 ## Sprint 2 — Oyun ekranı (oynanabilir)
 Hedef: tek turu baştan sona oynayabiliyorsun.
