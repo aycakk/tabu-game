@@ -30,10 +30,12 @@ Hedef: UI olmadan, testle doğrulanmış çekirdek mantık.
 ## Sprint 2 — Oyun ekranı (oynanabilir)
 Hedef: tek turu baştan sona oynayabiliyorsun.
 
-- [ ] `TimerRingView`, `WordCardView`, `ActionButton`.
-- [ ] `GameplayView`: kart + doğru sayacı + tur göstergesi (Tur 2/5) + Doğru/Pas/Tabu.
-- [ ] `PreRoundView` (Sıra sizde → Başla).
-- [ ] Kart geçiş animasyonu + haptik bağlama.
+- [x] `TimerRingView`, `WordCardView`, `ActionButton`.
+- [x] `GameplayView`: kart + doğru sayacı + tur göstergesi (Tur 2/5) + Doğru/Pas/Tabu.
+- [x] `PreRoundView` (Sıra sizde → Başla).
+- [x] Kart geçiş animasyonu + haptik bağlama.
+
+> Sprint 2 notu: `RootView`'daki "Yeni Oyun" geçici olarak sabit 2 takımla (Kırmızı/Teal, varsayılan ayarlar) direkt oyuna giriyor — gerçek `TeamSetupView` akışı Sprint 3'te bunun yerini alacak. PreRoundView/GameplayView'in simülatörde dokunmatik testi bu ortamda otomatikleştirilemedi (Simulator erişimi + XCUITest sandbox engeli); kullanıcı elle doğrulamalı.
 
 ## Sprint 3 — Akış & kurulum
 Hedef: menüden başlayıp oyuna giren tam akış.
