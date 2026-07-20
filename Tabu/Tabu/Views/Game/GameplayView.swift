@@ -1,0 +1,120 @@
+import SwiftUI
+
+/// Aktif tur ekranı — süre, kart, Pas/Tabu/Doğru aksiyonları.
+struct GameplayView: View {
+    @ObservedObject var viewModel: GameViewModel
+
+    private var currentTeam: Team? {
+        viewModel.teams.indices.contains(viewModel.currentTeamIndex) ? viewModel.teams[viewModel.currentTeamIndex] : nil
+    }
+
+    /// Takımın kendi anlatma sırası (1-tabanlı) / toplam tur sayısı — "Tur 2/5".
+    private var teamTurnNumber: Int {
+        guard !viewModel.teams.isEmpty else { return 1 }
+        return viewModel.currentRoundIndex / viewModel.teams.count + 1
+    }
+
+    var body: some View {
+        ZStack {
+            AppTheme.Gradients.teamBackground(hex: currentTeam?.colorHex ?? AppTheme.TeamColors.defaultTeam1)
+                .ignoresSafeArea()
+
+            VStack(spacing: 16) {
+                header
+                cardArea
+                actionButtons
+            }
+            .padding(.horizontal, 18)
+            .padding(.top, 6)
+            .padding(.bottom, 18)
+        }
+    }
+
+    private var header: some View {
+        HStack(spacing: 12) {
+            TimerRingView(secondsRemaining: viewModel.secondsRemaining, totalSeconds: viewModel.settings.roundDuration)
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(currentTeam?.name ?? "")
+                    .font(AppTheme.Fonts.fredoka(19, weight: .semibold))
+                    .foregroundStyle(AppTheme.Colors.textOnBrand)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+
+                Text("Tur \(teamTurnNumber)/\(viewModel.settings.roundCount)")
+                    .font(AppTheme.Fonts.nunitoSans(12, weight: .heavy))
+                    .foregroundStyle(AppTheme.Colors.textOnBrand.opacity(0.78))
+            }
+
+            Spacer(minLength: 0)
+
+            VStack(spacing: 2) {
+                Text("\(viewModel.currentCorrect)")
+                    .font(AppTheme.Fonts.fredoka(24))
+                    .foregroundStyle(AppTheme.Colors.textOnBrand)
+                Text("DOĞRU")
+                    .font(AppTheme.Fonts.nunitoSans(9, weight: .heavy))
+                    .tracking(1)
+                    .foregroundStyle(AppTheme.Colors.textOnBrand.opacity(0.78))
+            }
+            .frame(minWidth: 54)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 8)
+            .background(.white.opacity(0.20))
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+        }
+    }
+
+    private var cardArea: some View {
+        Group {
+            if let card = viewModel.activeCard {
+                WordCardView(card: card, teamColorHex: currentTeam?.colorHex ?? AppTheme.TeamColors.defaultTeam1)
+            }
+        }
+        .frame(maxHeight: .infinity)
+    }
+
+    private var actionButtons: some View {
+        VStack(spacing: 10) {
+            HStack(spacing: 10) {
+                ActionButton(
+                    title: "Pas",
+                    subtitle: "\(viewModel.settings.passLimit - viewModel.currentPasses) kaldı",
+                    backgroundColor: AppTheme.Colors.warning,
+                    shadowColor: AppTheme.Colors.warning.opacity(0.6),
+                    action: { viewModel.pass() }
+                )
+                .disabled(viewModel.currentPasses >= viewModel.settings.passLimit)
+
+                ActionButton(
+                    title: "Tabu",
+                    subtitle: "−\(viewModel.settings.tabooPenalty) puan",
+                    backgroundColor: AppTheme.Colors.danger,
+                    shadowColor: AppTheme.Colors.danger.opacity(0.6),
+                    action: { viewModel.markTaboo() }
+                )
+            }
+
+            ActionButton(
+                title: "Doğru",
+                glyph: "✓",
+                backgroundColor: AppTheme.Colors.success,
+                shadowColor: AppTheme.Colors.success.opacity(0.65),
+                action: { viewModel.markCorrect() }
+            )
+        }
+    }
+}
+
+#Preview {
+    let vm = GameViewModel(automaticallyRunsTimer: false)
+    vm.startNewGame(
+        teams: [
+            Team(name: "Kırmızı Takım", colorHex: AppTheme.TeamColors.defaultTeam1),
+            Team(name: "Teal Takım", colorHex: AppTheme.TeamColors.defaultTeam2)
+        ],
+        settings: GameSettings()
+    )
+    vm.startRound()
+    return GameplayView(viewModel: vm)
+}
