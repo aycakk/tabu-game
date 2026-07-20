@@ -1,9 +1,16 @@
 import SwiftUI
 
-/// Geçici kök yönlendirme. Sprint 3'te gerçek akışla (home → setup → game) değişecek;
-/// şimdilik "Yeni Oyun" sabit iki takımla direkt oyuna sokuyor (Sprint 2 playtest'i için).
+/// Kök yönlendirme: home → kurulum → oyun → (kapat/ana menü ile) çıkış.
 struct RootView: View {
+    private enum Route {
+        case home
+        case teamSetup
+        case howToPlay
+        case game
+    }
+
     @StateObject private var gameViewModel = GameViewModel()
+    @State private var route: Route = .home
 
     private var currentTeam: Team? {
         gameViewModel.teams.indices.contains(gameViewModel.currentTeamIndex)
@@ -12,21 +19,44 @@ struct RootView: View {
     }
 
     var body: some View {
+        switch route {
+        case .home:
+            HomeView(
+                onNewGame: { route = .teamSetup },
+                onHowToPlay: { route = .howToPlay }
+            )
+        case .teamSetup:
+            TeamSetupView(
+                onBack: { route = .home },
+                onStart: { teams, settings in
+                    gameViewModel.startNewGame(teams: teams, settings: settings)
+                    route = .game
+                }
+            )
+        case .howToPlay:
+            HowToPlayView(onClose: { route = .home })
+        case .game:
+            gameContent
+        }
+    }
+
+    @ViewBuilder
+    private var gameContent: some View {
         switch gameViewModel.phase {
         case .setup:
+            // startNewGame doğrulaması başarısız olduysa (ör. boş deste) buraya düşer.
             HomeView(
-                onNewGame: { gameViewModel.startNewGame(teams: playtestTeams, settings: GameSettings()) },
-                onHowToPlay: { /* Sprint 3 Adım 4'te bağlanacak */ }
+                onNewGame: { route = .teamSetup },
+                onHowToPlay: { route = .howToPlay }
             )
+            .onAppear { route = .home }
         case .preRound:
             if let team = currentTeam {
                 PreRoundView(
                     team: team,
                     onStart: { gameViewModel.startRound() },
-                    onClose: { gameViewModel.phase = .setup }
+                    onClose: { route = .home }
                 )
-            } else {
-                HomeView(onNewGame: {}, onHowToPlay: {})
             }
         case .playing:
             GameplayView(viewModel: gameViewModel)
@@ -58,7 +88,7 @@ struct RootView: View {
                 }
 
                 Button {
-                    gameViewModel.phase = .setup
+                    route = .home
                 } label: {
                     Text("Ana Menü")
                         .font(AppTheme.Fonts.buttonSmall)
@@ -73,14 +103,6 @@ struct RootView: View {
             .padding(28)
         }
     }
-
-    private var playtestTeams: [Team] {
-        [
-            Team(name: "Kırmızı Takım", colorHex: AppTheme.TeamColors.defaultTeam1),
-            Team(name: "Teal Takım", colorHex: AppTheme.TeamColors.defaultTeam2)
-        ]
-    }
-
 }
 
 #Preview {
