@@ -40,10 +40,12 @@ Hedef: tek turu baştan sona oynayabiliyorsun.
 ## Sprint 3 — Akış & kurulum
 Hedef: menüden başlayıp oyuna giren tam akış.
 
-- [ ] `RootView` yönlendirme (home → setup → game → çıkış).
-- [ ] `HomeView` (Yeni Oyun, Nasıl Oynanır).
-- [ ] `TeamSetupView` (takım adı + renk swatch'ı; stepper'lar: tur sayısı / süre / pas / ceza).
-- [ ] `HowToPlayView`.
+- [x] `RootView` yönlendirme (home → setup → game → çıkış).
+- [x] `HomeView` (Yeni Oyun, Nasıl Oynanır).
+- [x] `TeamSetupView` (takım adı + renk swatch'ı; stepper'lar: tur sayısı / süre / pas / ceza).
+- [x] `HowToPlayView`.
+
+> Sprint 3 notu: Sprint 2'nin geçici sabit-takım hack'i kaldırıldı; artık gerçek `Route` enum'u (home/teamSetup/howToPlay/game) ile yönlendiriliyor. TeamSetupView'da bir takımın seçtiği renk diğer takımda devre dışı bırakılıyor. `matchEndPlaceholder` hâlâ geçici — Sprint 4'te `RoundSummaryView`/`GameOverView` bunun yerini alacak.
 
 ## Sprint 4 — Tur arası & oyun sonu
 Hedef: tam maç döngüsü uçtan uca (beraberlik dahil).
