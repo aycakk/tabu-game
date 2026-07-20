@@ -69,9 +69,15 @@ struct GameplayView: View {
         Group {
             if let card = viewModel.activeCard {
                 WordCardView(card: card, teamColorHex: currentTeam?.colorHex ?? AppTheme.TeamColors.defaultTeam1)
+                    .id(card.id)
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .trailing).combined(with: .opacity),
+                        removal: .move(edge: .leading).combined(with: .opacity)
+                    ))
             }
         }
         .frame(maxHeight: .infinity)
+        .animation(.spring(response: 0.35, dampingFraction: 0.85), value: viewModel.activeCard?.id)
     }
 
     private var actionButtons: some View {
@@ -82,7 +88,10 @@ struct GameplayView: View {
                     subtitle: "\(viewModel.settings.passLimit - viewModel.currentPasses) kaldı",
                     backgroundColor: AppTheme.Colors.warning,
                     shadowColor: AppTheme.Colors.warning.opacity(0.6),
-                    action: { viewModel.pass() }
+                    action: {
+                        Haptics.selection()
+                        viewModel.pass()
+                    }
                 )
                 .disabled(viewModel.currentPasses >= viewModel.settings.passLimit)
 
@@ -91,7 +100,10 @@ struct GameplayView: View {
                     subtitle: "−\(viewModel.settings.tabooPenalty) puan",
                     backgroundColor: AppTheme.Colors.danger,
                     shadowColor: AppTheme.Colors.danger.opacity(0.6),
-                    action: { viewModel.markTaboo() }
+                    action: {
+                        Haptics.error()
+                        viewModel.markTaboo()
+                    }
                 )
             }
 
@@ -100,7 +112,10 @@ struct GameplayView: View {
                 glyph: "✓",
                 backgroundColor: AppTheme.Colors.success,
                 shadowColor: AppTheme.Colors.success.opacity(0.65),
-                action: { viewModel.markCorrect() }
+                action: {
+                    Haptics.success()
+                    viewModel.markCorrect()
+                }
             )
         }
     }
