@@ -50,10 +50,12 @@ Hedef: menüden başlayıp oyuna giren tam akış.
 ## Sprint 4 — Tur arası & oyun sonu
 Hedef: tam maç döngüsü uçtan uca (beraberlik dahil).
 
-- [ ] `ScoreBoardView`.
-- [ ] `RoundSummaryView` (doğru/pas/tabu + net puan + skor tablosu + Devam).
-- [ ] `GameOverView` (kazanan, final skorları, Tekrar Oyna / Ana Menü).
-- [ ] `ConfettiView` + beraberlik → "Ani ölüm turu" ekran durumu.
+- [x] `ScoreBoardView`.
+- [x] `RoundSummaryView` (doğru/pas/tabu + net puan + skor tablosu + Devam).
+- [x] `GameOverView` (kazanan, final skorları, Tekrar Oyna / Ana Menü).
+- [x] `ConfettiView` + beraberlik → "Ani ölüm turu" ekran durumu.
+
+> Sprint 4 notu: `matchEndPlaceholder` kaldırıldı. RootView, `lastRoundResult`'ı "Devam" ile onaylanana kadar hem `.preRound` hem `.gameOver` fazında gösterir — kod izlerken bulunan bir hata, önceden son turun özeti hiç gösterilmeden direkt Oyun Sonu'na atlanıyordu. `PreRoundView` artık `isSuddenDeath` bayrağıyla "ANİ ÖLÜM TURU" pill'i gösterebiliyor. `GameOverView` mockup'ta yok; `RoundSummaryView`'daki görsel dille tutarlı tasarlandı.
 
 ## Sprint 5 — Kalıcılık, cila & App Store
 Hedef: yayına hazır build.
