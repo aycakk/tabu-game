@@ -3,7 +3,7 @@ import SwiftData
 
 /// Kök yönlendirme: home → kurulum → oyun → (kapat/ana menü ile) çıkış.
 struct RootView: View {
-    private enum Route {
+    private enum Route: Equatable {
         case home
         case teamSetup
         case howToPlay
@@ -25,30 +25,47 @@ struct RootView: View {
     }
 
     var body: some View {
-        switch route {
-        case .home:
-            HomeView(
-                onNewGame: { route = .teamSetup },
-                onHowToPlay: { route = .howToPlay }
-            )
-        case .teamSetup:
-            TeamSetupView(
-                onBack: { route = .home },
-                onStart: { teams, settings in
-                    didSaveMatchResult = false
-                    gameViewModel.startNewGame(teams: teams, settings: settings)
-                    route = .game
-                }
-            )
-        case .howToPlay:
-            HowToPlayView(onClose: { route = .home })
-        case .game:
-            gameContent
+        Group {
+            switch route {
+            case .home:
+                HomeView(
+                    onNewGame: { route = .teamSetup },
+                    onHowToPlay: { route = .howToPlay }
+                )
+            case .teamSetup:
+                TeamSetupView(
+                    onBack: { route = .home },
+                    onStart: { teams, settings in
+                        didSaveMatchResult = false
+                        gameViewModel.startNewGame(teams: teams, settings: settings)
+                        route = .game
+                    }
+                )
+            case .howToPlay:
+                HowToPlayView(onClose: { route = .home })
+            case .game:
+                gameContent
+            }
         }
+        .animation(.easeInOut(duration: 0.25), value: route)
+    }
+
+    /// Faz + tur-özeti-onay durumunu tek bir Equatable anahtarda birleştirir (gameContent'in
+    /// aynı .preRound/.gameOver faz değeri içindeki iç geçişlerini de animasyonla tetiklemek için).
+    private var gameContentAnimationKey: String {
+        "\(gameViewModel.phase)-\(acknowledgedRoundResultID?.uuidString ?? "none")"
     }
 
     @ViewBuilder
     private var gameContent: some View {
+        Group {
+            gameContentSwitch
+        }
+        .animation(.easeInOut(duration: 0.25), value: gameContentAnimationKey)
+    }
+
+    @ViewBuilder
+    private var gameContentSwitch: some View {
         switch gameViewModel.phase {
         case .setup:
             // startNewGame doğrulaması başarısız olduysa (ör. boş deste) buraya düşer.
