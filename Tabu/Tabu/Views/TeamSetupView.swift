@@ -135,6 +135,10 @@ struct TeamSetupView: View {
                         guard hex != disabledColorHex else { return }
                         selectedColorHex.wrappedValue = hex
                     }
+                    .accessibilityLabel(colorName(for: hex))
+                    .accessibilityAddTraits(
+                        hex == selectedColorHex.wrappedValue ? [.isButton, .isSelected] : .isButton
+                    )
                 }
             }
         }
@@ -158,6 +162,18 @@ struct TeamSetupView: View {
             }
         }
         .shadow(color: isSelected ? Color(hex: hex).opacity(0.8) : .clear, radius: 8, y: 4)
+    }
+
+    private func colorName(for hex: String) -> String {
+        switch hex {
+        case AppTheme.TeamColors.swatches[0]: return "Kırmızı"
+        case AppTheme.TeamColors.swatches[1]: return "Teal"
+        case AppTheme.TeamColors.swatches[2]: return "Mor"
+        case AppTheme.TeamColors.swatches[3]: return "Amber"
+        case AppTheme.TeamColors.swatches[4]: return "Mavi"
+        case AppTheme.TeamColors.swatches[5]: return "Pembe"
+        default: return "Renk"
+        }
     }
 
     private var settingsCard: some View {
@@ -230,6 +246,7 @@ struct TeamSetupView: View {
                 HStack(spacing: 12) {
                     stepperButton(
                         glyph: "–",
+                        label: "\(title) azalt",
                         foregroundColor: AppTheme.Colors.textMuted,
                         backgroundColor: AppTheme.Colors.surface,
                         isEnabled: value > range.lowerBound
@@ -244,6 +261,7 @@ struct TeamSetupView: View {
 
                     stepperButton(
                         glyph: "+",
+                        label: "\(title) artır",
                         foregroundColor: AppTheme.Colors.accent,
                         backgroundColor: AppTheme.Colors.accent.opacity(0.12),
                         isEnabled: value < range.upperBound
@@ -264,6 +282,7 @@ struct TeamSetupView: View {
 
     private func stepperButton(
         glyph: String,
+        label: String,
         foregroundColor: Color,
         backgroundColor: Color,
         isEnabled: Bool,
@@ -279,6 +298,7 @@ struct TeamSetupView: View {
         }
         .disabled(!isEnabled)
         .opacity(isEnabled ? 1 : 0.4)
+        .accessibilityLabel(label)
     }
 
     private var startButton: some View {

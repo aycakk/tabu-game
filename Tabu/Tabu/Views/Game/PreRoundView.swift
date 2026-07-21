@@ -75,6 +75,7 @@ struct PreRoundView: View {
                 .background(.white.opacity(0.20))
                 .clipShape(Circle())
         }
+        .accessibilityLabel("Kapat")
     }
 
     private var startButton: some View {

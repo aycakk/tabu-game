@@ -36,6 +36,7 @@ struct GameOverView: View {
         VStack(spacing: 14) {
             Text("🏆")
                 .font(.system(size: 48))
+                .accessibilityHidden(true)
 
             Text("OYUN BİTTİ")
                 .font(AppTheme.Fonts.nunitoSans(10, weight: .black))

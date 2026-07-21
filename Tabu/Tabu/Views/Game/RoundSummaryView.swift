@@ -92,6 +92,9 @@ struct RoundSummaryView: View {
         .background(AppTheme.Colors.card)
         .clipShape(RoundedRectangle(cornerRadius: AppTheme.Corner.tile))
         .shadow(color: .black.opacity(0.08), radius: 13, y: 8)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(label)
+        .accessibilityValue("\(value)")
     }
 
     private var netScoreSection: some View {

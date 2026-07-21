@@ -33,6 +33,9 @@ struct GameplayView: View {
     private var header: some View {
         HStack(spacing: 12) {
             TimerRingView(secondsRemaining: viewModel.secondsRemaining, totalSeconds: viewModel.settings.roundDuration)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Kalan süre")
+                .accessibilityValue("\(viewModel.secondsRemaining) saniye")
 
             VStack(alignment: .leading, spacing: 3) {
                 Text(currentTeam?.name ?? "")
@@ -62,6 +65,9 @@ struct GameplayView: View {
             .padding(.vertical, 8)
             .background(.white.opacity(0.20))
             .clipShape(RoundedRectangle(cornerRadius: 16))
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Doğru sayısı")
+            .accessibilityValue("\(viewModel.currentCorrect)")
         }
     }
 

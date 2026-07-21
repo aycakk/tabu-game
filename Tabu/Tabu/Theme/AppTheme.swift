@@ -103,38 +103,48 @@ enum AppTheme {
         private static let nunitoExtraBold = "NunitoSans12ptExtraLight12pt-ExtraBold"
         private static let nunitoBlack = "NunitoSans12ptExtraLight12pt-Black"
 
-        /// Başlık ailesi — Fredoka.
-        static func fredoka(_ size: CGFloat, weight: Font.Weight = .bold) -> Font {
-            .custom(weight == .semibold ? fredokaSemiBold : fredokaBold, size: size)
+        /// Başlık ailesi — Fredoka. Dynamic Type'a göre ölçeklenir (relativeTo).
+        static func fredoka(_ size: CGFloat, weight: Font.Weight = .bold, relativeTo textStyle: Font.TextStyle = .body) -> Font {
+            .custom(weight == .semibold ? fredokaSemiBold : fredokaBold, size: size, relativeTo: textStyle)
         }
 
-        /// Gövde ailesi — Nunito Sans.
-        static func nunitoSans(_ size: CGFloat, weight: Font.Weight = .semibold) -> Font {
-            let name: String
+        /// Sabit boyutlu Fredoka — dar/sabit alanlarda (ör. TimerRingView'ın 62x62 dairesi)
+        /// Dynamic Type büyümesinin taşmaya yol açacağı yerler için.
+        static func fredokaFixed(_ size: CGFloat, weight: Font.Weight = .bold) -> Font {
+            .custom(weight == .semibold ? fredokaSemiBold : fredokaBold, fixedSize: size)
+        }
+
+        /// Gövde ailesi — Nunito Sans. Dynamic Type'a göre ölçeklenir.
+        static func nunitoSans(_ size: CGFloat, weight: Font.Weight = .semibold, relativeTo textStyle: Font.TextStyle = .body) -> Font {
+            .custom(nunitoName(for: weight), size: size, relativeTo: textStyle)
+        }
+
+        private static func nunitoName(for weight: Font.Weight) -> String {
             switch weight {
-            case .black: name = nunitoBlack
-            case .heavy: name = nunitoExtraBold
-            case .bold: name = nunitoBold
-            default: name = nunitoSemiBold
+            case .black: return nunitoBlack
+            case .heavy: return nunitoExtraBold
+            case .bold: return nunitoBold
+            default: return nunitoSemiBold
             }
-            return .custom(name, size: size)
         }
 
         // Semantik roller — mockup'taki kullanım noktaları.
-        static let splashTitle = fredoka(96)             // TABU
-        static let roundTeamTitle = fredoka(60)          // "Kırmızı Takım" (Sıra Sizde)
-        static let cardWord = fredoka(48)                // PLAJ
-        static let scoreHuge = fredoka(64)               // +8 puan
-        static let scoreBig = fredoka(32)                // skor tablosu rakamı
-        static let screenTitle = fredoka(21, weight: .semibold)
-        static let button = fredoka(22)
-        static let buttonSmall = fredoka(20)
-        static let timer = fredoka(24)
+        // splashTitle sabit boyutta: marka logosu, aşırı büyümesi dizaynı bozar.
+        static let splashTitle = fredokaFixed(96)                            // TABU
+        static let roundTeamTitle = fredoka(60, relativeTo: .largeTitle)     // "Kırmızı Takım" (Sıra Sizde)
+        static let cardWord = fredoka(48, relativeTo: .largeTitle)           // PLAJ
+        static let scoreHuge = fredoka(64, relativeTo: .largeTitle)          // +8 puan
+        static let scoreBig = fredoka(32, relativeTo: .title)                // skor tablosu rakamı
+        static let screenTitle = fredoka(21, weight: .semibold, relativeTo: .title3)
+        static let button = fredoka(22, relativeTo: .headline)
+        static let buttonSmall = fredoka(20, relativeTo: .headline)
+        // timer sabit boyutta: TimerRingView'ın 62x62 dairesi taşmayı kaldırmaz.
+        static let timer = fredokaFixed(24)
 
-        static let body = nunitoSans(16)
-        static let bodyBold = nunitoSans(15, weight: .heavy)
-        static let caption = nunitoSans(12, weight: .heavy)
-        static let overline = nunitoSans(11, weight: .heavy)  // + tracking(1.5)
+        static let body = nunitoSans(16, relativeTo: .body)
+        static let bodyBold = nunitoSans(15, weight: .heavy, relativeTo: .subheadline)
+        static let caption = nunitoSans(12, weight: .heavy, relativeTo: .caption)
+        static let overline = nunitoSans(11, weight: .heavy, relativeTo: .caption2)  // + tracking(1.5)
     }
 
     // MARK: - Köşe yarıçapları
