@@ -1,9 +1,13 @@
 import SwiftUI
+import SwiftData
 
 /// Takım kurulumu ekranı (mockup 02·Kurulum) — takım adı/rengi + tur ayarları.
 struct TeamSetupView: View {
     var onBack: () -> Void
     var onStart: ([Team], GameSettings) -> Void
+
+    @Environment(\.modelContext) private var modelContext
+    @Query private var settingsRecords: [SettingsRecord]
 
     @State private var team1Name = "Kırmızı Takım"
     @State private var team1ColorHex = AppTheme.TeamColors.defaultTeam1
@@ -44,6 +48,23 @@ struct TeamSetupView: View {
             startButton
         }
         .background(AppTheme.Colors.surface.ignoresSafeArea())
+        .onAppear {
+            if let saved = settingsRecords.first {
+                settings = saved.asGameSettings
+            }
+        }
+    }
+
+    private func persistSettings() {
+        if let existing = settingsRecords.first {
+            existing.roundCount = settings.roundCount
+            existing.roundDuration = settings.roundDuration
+            existing.passLimit = settings.passLimit
+            existing.tabooPenalty = settings.tabooPenalty
+        } else {
+            modelContext.insert(SettingsRecord(from: settings))
+        }
+        try? modelContext.save()
     }
 
     private var header: some View {
@@ -262,6 +283,7 @@ struct TeamSetupView: View {
 
     private var startButton: some View {
         Button {
+            persistSettings()
             let teams = [
                 Team(name: team1Name.trimmingCharacters(in: .whitespaces), colorHex: team1ColorHex),
                 Team(name: team2Name.trimmingCharacters(in: .whitespaces), colorHex: team2ColorHex)
@@ -288,4 +310,5 @@ struct TeamSetupView: View {
 
 #Preview {
     TeamSetupView(onBack: {}, onStart: { _, _ in })
+        .modelContainer(for: SettingsRecord.self, inMemory: true)
 }

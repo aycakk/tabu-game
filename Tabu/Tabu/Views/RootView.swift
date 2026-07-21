@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 /// Kök yönlendirme: home → kurulum → oyun → (kapat/ana menü ile) çıkış.
 struct RootView: View {
@@ -9,10 +10,13 @@ struct RootView: View {
         case game
     }
 
+    @Environment(\.modelContext) private var modelContext
     @StateObject private var gameViewModel = GameViewModel()
     @State private var route: Route = .home
     /// "Devam"a basılana kadar hangi tur özetinin gösterildiğini takip eder.
     @State private var acknowledgedRoundResultID: UUID?
+    /// Bu maç için MatchResult zaten kaydedildi mi (Tekrar Oyna'da yeniden false'a döner).
+    @State private var didSaveMatchResult = false
 
     private var currentTeam: Team? {
         gameViewModel.teams.indices.contains(gameViewModel.currentTeamIndex)
@@ -31,6 +35,7 @@ struct RootView: View {
             TeamSetupView(
                 onBack: { route = .home },
                 onStart: { teams, settings in
+                    didSaveMatchResult = false
                     gameViewModel.startNewGame(teams: teams, settings: settings)
                     route = .game
                 }
@@ -81,12 +86,31 @@ struct RootView: View {
                     winner: winner,
                     scoreRows: finalScoreRows(winnerID: winner.id),
                     onPlayAgain: {
+                        didSaveMatchResult = false
                         gameViewModel.startNewGame(teams: gameViewModel.teams, settings: gameViewModel.settings)
                     },
                     onHome: { route = .home }
                 )
+                .onAppear { saveMatchResultIfNeeded(winner: winner) }
             }
         }
+    }
+
+    private func saveMatchResultIfNeeded(winner: Team) {
+        guard !didSaveMatchResult, gameViewModel.teams.count == 2 else { return }
+        didSaveMatchResult = true
+        let team1 = gameViewModel.teams[0]
+        let team2 = gameViewModel.teams[1]
+        modelContext.insert(
+            MatchResult(
+                team1Name: team1.name,
+                team2Name: team2.name,
+                team1Score: team1.score,
+                team2Score: team2.score,
+                winnerName: winner.name
+            )
+        )
+        try? modelContext.save()
     }
 
     /// lastRoundResult henüz "Devam" ile onaylanmadıysa (team, result) çiftini döner.
@@ -142,4 +166,5 @@ struct RootView: View {
 
 #Preview {
     RootView()
+        .modelContainer(for: [SettingsRecord.self, MatchResult.self], inMemory: true)
 }
