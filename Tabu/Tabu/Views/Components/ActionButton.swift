@@ -19,6 +19,9 @@ struct ActionButton: View {
                 .clipShape(RoundedRectangle(cornerRadius: AppTheme.Corner.button))
                 .shadow(color: shadowColor, radius: 14, y: 8)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(subtitle.map { "\(title), \($0)" } ?? title)
+        .accessibilityAddTraits(.isButton)
     }
 
     @ViewBuilder

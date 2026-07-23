@@ -45,11 +45,15 @@ struct WordCardView: View {
                             .font(.system(size: 12, weight: .black))
                             .foregroundStyle(AppTheme.Colors.danger)
                     }
+                    .accessibilityHidden(true)
+
                     Text(word.uppercased())
                         .font(AppTheme.Fonts.nunitoSans(18, weight: .heavy))
                         .foregroundStyle(AppTheme.Colors.textPrimary)
                 }
                 .padding(.vertical, 11)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Yasak: \(word)")
 
                 if index < card.forbidden.count - 1 {
                     Rectangle()

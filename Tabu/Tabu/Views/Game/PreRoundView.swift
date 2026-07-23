@@ -3,6 +3,7 @@ import SwiftUI
 /// "Sıra Sizde" ekranı — turu başlatacak takımı gösterir, Başla'ya basınca oyun başlar.
 struct PreRoundView: View {
     let team: Team
+    var isSuddenDeath: Bool = false
     var onStart: () -> Void
     var onClose: () -> Void
 
@@ -39,7 +40,7 @@ struct PreRoundView: View {
 
     private var centerContent: some View {
         VStack(spacing: 0) {
-            Text("SIRA SİZDE")
+            Text(isSuddenDeath ? "ANİ ÖLÜM TURU" : "SIRA SİZDE")
                 .font(AppTheme.Fonts.overline)
                 .tracking(2.5)
                 .foregroundStyle(AppTheme.Colors.textOnBrand)
@@ -74,6 +75,7 @@ struct PreRoundView: View {
                 .background(.white.opacity(0.20))
                 .clipShape(Circle())
         }
+        .accessibilityLabel("Kapat")
     }
 
     private var startButton: some View {

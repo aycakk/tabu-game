@@ -89,6 +89,7 @@ struct HowToPlayView: View {
                     .frame(width: 42, height: 42)
                     .background(Color(hex: item.tintHex).opacity(0.12))
                     .clipShape(RoundedRectangle(cornerRadius: 14))
+                    .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(item.title)
@@ -101,6 +102,7 @@ struct HowToPlayView: View {
                 }
             }
             .padding(.vertical, 13)
+            .accessibilityElement(children: .combine)
 
             if showsDivider {
                 Rectangle()
