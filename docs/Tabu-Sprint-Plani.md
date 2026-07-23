@@ -60,10 +60,13 @@ Hedef: tam maç döngüsü uçtan uca (beraberlik dahil).
 ## Sprint 5 — Kalıcılık, cila & App Store
 Hedef: yayına hazır build.
 
-- [ ] SwiftData: `SettingsRecord` (son ayarları hatırla), `MatchResult` (maç geçmişi).
-- [ ] Cila: geçiş animasyonları, son 10 sn kırmızı/nabız, erişilebilirlik (Dynamic Type, VoiceOver etiketleri).
-- [ ] App Store: ikon, launch screen, gizlilik etiketi (veri toplanmıyor), ad/sürüm, ekran görüntüleri.
-- [ ] Cihazda test + son düzeltmeler.
+- [x] SwiftData: `SettingsRecord` (son ayarları hatırla), `MatchResult` (maç geçmişi).
+- [x] Cila: geçiş animasyonları, son 10 sn kırmızı/nabız, erişilebilirlik (Dynamic Type, VoiceOver etiketleri).
+- [x] App Store: ikon, launch screen, gizlilik etiketi (veri toplanmıyor), ad/sürüm.
+- [ ] Ekran görüntüleri (App Store Connect'e yüklenecek) — kullanıcı yapmalı.
+- [ ] Cihazda test + son düzeltmeler — bu ortamda gerçek cihaz/dokunmatik erişimi yok, kullanıcı yapmalı.
+
+> Sprint 5 notu: `PersistenceTests` SettingsRecord/MatchResult'ın taze bir ModelContainer'la (uygulama yeniden başlatmayı simüle eder) okunabildiğini doğruluyor. `AppTheme.Fonts` artık Dynamic Type'a göre ölçekleniyor (splashTitle ve timer bilinçli olarak sabit boyutta kaldı). AppIcon programatik üretildi (ImageRenderer, tek görsel/3 slot — dark/tinted varyantları v2'ye bırakıldı). Bu ortamda simülatörde dokunmatik/XCUITest erişimi hâlâ yok; tüm görsel doğrulamalar screenshot + statik inceleme + unit/persistence testleriyle yapıldı. Gerçek cihazda uçtan uca oynanış testi ve App Store ekran görüntüleri kullanıcıya kalıyor.
 
 ---
 
