@@ -28,6 +28,16 @@ struct GameplayView: View {
             .padding(.top, 6)
             .padding(.bottom, 18)
         }
+        .onChange(of: viewModel.secondsRemaining) {
+            switch viewModel.secondsRemaining {
+            case 1...10:
+                SoundEffects.tick()
+            case 0:
+                SoundEffects.roundEnd()
+            default:
+                break
+            }
+        }
     }
 
     private var header: some View {
@@ -108,6 +118,7 @@ struct GameplayView: View {
                     shadowColor: AppTheme.Colors.danger.opacity(0.6),
                     action: {
                         Haptics.error()
+                        SoundEffects.taboo()
                         viewModel.markTaboo()
                     }
                 )
@@ -120,6 +131,7 @@ struct GameplayView: View {
                 shadowColor: AppTheme.Colors.success.opacity(0.65),
                 action: {
                     Haptics.success()
+                    SoundEffects.correct()
                     viewModel.markCorrect()
                 }
             )
