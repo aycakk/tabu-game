@@ -10,6 +10,13 @@ struct GameOverView: View {
 
     private var winnerColor: Color { Color(hex: winner.colorHex) }
 
+    private var shareText: String {
+        let scoresText = scoreRows
+            .map { "\($0.team.name): \($0.team.score)" }
+            .joined(separator: " · ")
+        return "🏆 Tabu'da \(winner.name) kazandı!\n\(scoresText)\n\nSen de arkadaşlarınla oyna! 🎯"
+    }
+
     var body: some View {
         ZStack {
             AppTheme.Colors.surface.ignoresSafeArea()
@@ -83,6 +90,19 @@ struct GameOverView: View {
                     .background(AppTheme.Gradients.brand)
                     .clipShape(RoundedRectangle(cornerRadius: AppTheme.Corner.button))
                     .shadow(color: AppTheme.Colors.brandMid.opacity(0.55), radius: 17, y: 9)
+            }
+
+            ShareLink(item: shareText) {
+                HStack(spacing: 8) {
+                    Image(systemName: "square.and.arrow.up")
+                    Text("Sonucu Paylaş")
+                }
+                .font(AppTheme.Fonts.buttonSmall)
+                .foregroundStyle(AppTheme.Colors.accent)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .background(AppTheme.Colors.accent.opacity(0.10))
+                .clipShape(RoundedRectangle(cornerRadius: AppTheme.Corner.button))
             }
 
             Button(action: onHome) {
