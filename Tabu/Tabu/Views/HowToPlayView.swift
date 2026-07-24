@@ -1,6 +1,8 @@
 import SwiftUI
 
-/// "Nasıl Oynanır" sayfası — sheet stili, mockup 06.
+/// "Nasıl Oynanır" içeriği — mockup 06. RootView tarafından native .sheet() ile
+/// Ana Ekran'ın üzerinde sunulur; yuvarlak üst köşe + arka plan dim'i sistem sağlar,
+/// burada sadece iç içerik + kendi kulp göstergemiz var.
 struct HowToPlayView: View {
     var onClose: () -> Void
 
@@ -21,16 +23,6 @@ struct HowToPlayView: View {
     ]
 
     var body: some View {
-        ZStack(alignment: .top) {
-            AppTheme.Colors.surfaceAlt.ignoresSafeArea()
-
-            sheet
-                .frame(maxHeight: .infinity, alignment: .top)
-                .padding(.top, 8)
-        }
-    }
-
-    private var sheet: some View {
         VStack(spacing: 0) {
             Capsule()
                 .fill(AppTheme.Colors.handle)
@@ -76,9 +68,7 @@ struct HowToPlayView: View {
             .padding(.bottom, 26)
         }
         .background(AppTheme.Colors.card)
-        .clipShape(
-            UnevenRoundedRectangle(topLeadingRadius: 28, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: 28)
-        )
+        .presentationDragIndicator(.hidden)
     }
 
     private func row(for item: Item, showsDivider: Bool) -> some View {
