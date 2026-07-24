@@ -59,7 +59,7 @@ Tabu/
 │  └─ Color+Hex.swift
 └─ Resources/
    ├─ deck_tr.json
-   └─ Fonts/                     // Fredoka + Nunito Sans (SIL OFL, statik ağırlıklar)
+   └─ Fonts/                     // Baloo 2 + Nunito Sans (SIL OFL, statik ağırlıklar)
 ```
 
 Not: `Info.plist` xcodeproj yanında açık dosya olarak durur (`UIAppFonts` için; kalan key'ler `GENERATE_INFOPLIST_FILE` ile üretilir).
@@ -109,7 +109,7 @@ Views "aptal" katmandır: aksiyon yollar, state çizer. Theme renk/gradyan/tipog
 
 Kaynak: `docs/Tabu Akış.html` mockup'ı; token'lar `Theme/AppTheme.swift` içinde.
 
-- **Fontlar:** Fredoka (SemiBold/Bold — başlık, buton, skor) + Nunito Sans (SemiBold/Bold/ExtraBold/Black — gövde, etiket).
+- **Fontlar:** Baloo 2 (SemiBold/Bold — başlık, buton, skor; mockup'taki Fredoka'nın yerini aldı çünkü Fredoka'da ğ/Ğ/İ/ş/Ş glyph'leri hiç yok) + Nunito Sans (SemiBold/Bold/ExtraBold/Black — gövde, etiket). `AppTheme.Fonts.fredoka()`/`fredokaFixed()` fonksiyon adları geriye dönük uyumluluk için korundu, artık Baloo 2 render ediyor.
 - **Palet:** pageBg `#E7E5DF` · surface `#F4F5FB` · textPrimary `#1F2937` · textMuted `#6B7280` · accent `#00C2A8` · success `#16A34A` · warning `#F59E0B` · danger `#EF4444`.
 - **Marka gradyanı:** `#FF2D78 → #FF7A1A → #FFC53D` (135°).
 - **Takım swatch'ları (6):** `#FF5A5F` `#00C2A8` `#7C5CFF` `#FFB400` `#19A7FF` `#FF4FA3`. Tur ekranı arka planı takım renginden ×0.58 koyulaştırmayla türetilir.
