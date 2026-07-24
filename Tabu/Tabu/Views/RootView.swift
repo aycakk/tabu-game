@@ -82,11 +82,11 @@ struct RootView: View {
                     team: team,
                     isSuddenDeath: gameViewModel.isSuddenDeath,
                     onStart: { gameViewModel.startRound() },
-                    onClose: { route = .home }
+                    onClose: { exitToHome() }
                 )
             }
         case .playing:
-            GameplayView(viewModel: gameViewModel)
+            GameplayView(viewModel: gameViewModel, onClose: { exitToHome() })
         case .roundSummary:
             // GameViewModel şu an bu faza hiç geçmiyor (bkz. Tabu-Mimari.md); savunma amaçlı ana menüye dön.
             HomeView(
@@ -146,8 +146,15 @@ struct RootView: View {
             result: pending.result,
             scoreRows: roundSummaryRows(playedTeamID: pending.team.id),
             isSuddenDeath: isSuddenDeathRound(pending.result),
-            onContinue: { acknowledgedRoundResultID = pending.result.id }
+            onContinue: { acknowledgedRoundResultID = pending.result.id },
+            onClose: { exitToHome() }
         )
+    }
+
+    /// Devam eden maçı güvenli şekilde iptal edip ana menüye döner (timer'ı durdurur).
+    private func exitToHome() {
+        gameViewModel.abandonGame()
+        route = .home
     }
 
     /// GameViewModel.isSuddenDeath "bundan sonraki tur"u yansıtır; bir sonucun ait olduğu turun

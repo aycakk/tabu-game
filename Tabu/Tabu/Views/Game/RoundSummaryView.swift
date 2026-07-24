@@ -7,6 +7,7 @@ struct RoundSummaryView: View {
     let scoreRows: [ScoreBoardView.Row]
     var isSuddenDeath: Bool = false
     var onContinue: () -> Void
+    var onClose: () -> Void
 
     private var teamColor: Color { Color(hex: team.colorHex) }
     private var netScoreColor: Color { result.netScore >= 0 ? AppTheme.Colors.success : AppTheme.Colors.danger }
@@ -16,6 +17,8 @@ struct RoundSummaryView: View {
             AppTheme.Colors.surface.ignoresSafeArea()
 
             VStack(spacing: 0) {
+                closeButtonRow
+
                 ScrollView {
                     VStack(spacing: 0) {
                         header
@@ -41,6 +44,25 @@ struct RoundSummaryView: View {
                 continueButton
             }
         }
+    }
+
+    private var closeButtonRow: some View {
+        HStack {
+            Button(action: onClose) {
+                Text("✕")
+                    .font(.system(size: 14, weight: .heavy))
+                    .foregroundStyle(AppTheme.Colors.textPrimary)
+                    .frame(width: 32, height: 32)
+                    .background(AppTheme.Colors.card)
+                    .clipShape(Circle())
+                    .shadow(color: .black.opacity(0.10), radius: 8, y: 4)
+            }
+            .accessibilityLabel("Kapat")
+
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, 22)
+        .padding(.top, 14)
     }
 
     private var header: some View {
@@ -148,6 +170,7 @@ struct RoundSummaryView: View {
             .init(team: team1, statusText: "Şimdi anlattı", statusColor: Color(hex: team1.colorHex), isHighlighted: true),
             .init(team: team2, statusText: "Sırada", statusColor: AppTheme.Colors.textMuted, isHighlighted: false)
         ],
-        onContinue: {}
+        onContinue: {},
+        onClose: {}
     )
 }

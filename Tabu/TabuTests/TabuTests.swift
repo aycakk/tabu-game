@@ -163,6 +163,26 @@ final class TabuTests: XCTestCase {
         XCTAssertNotNil(viewModel.lastRoundResult)
     }
 
+    func testAbandonGameStopsRoundAndIgnoresLateTicks() {
+        let viewModel = makeStartedGame(settings: GameSettings(roundCount: 3, roundDuration: 60, passLimit: 3, tabooPenalty: 1))
+        viewModel.startRound()
+        viewModel.markCorrect()
+
+        viewModel.abandonGame()
+
+        XCTAssertEqual(viewModel.phase, .setup)
+        XCTAssertNil(viewModel.activeCard)
+        XCTAssertNil(viewModel.lastRoundResult)
+        XCTAssertNil(viewModel.winner)
+
+        // Terk edildikten sonra gelecek gecikmiş bir tick (arka planda kalmış bir timer'dan)
+        // sessizce state değiştirmemeli — RootView'ın "kapat" butonundan sonra bunu bekliyoruz.
+        let secondsBefore = viewModel.secondsRemaining
+        viewModel.tick()
+        XCTAssertEqual(viewModel.secondsRemaining, secondsBefore)
+        XCTAssertEqual(viewModel.phase, .setup)
+    }
+
     private func playRound(on viewModel: GameViewModel, correct: Int = 0, taboos: Int = 0) {
         viewModel.startRound()
         for _ in 0..<correct {

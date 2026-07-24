@@ -3,6 +3,7 @@ import SwiftUI
 /// Aktif tur ekranı — süre, kart, Pas/Tabu/Doğru aksiyonları.
 struct GameplayView: View {
     @ObservedObject var viewModel: GameViewModel
+    var onClose: () -> Void
 
     private var currentTeam: Team? {
         viewModel.teams.indices.contains(viewModel.currentTeamIndex) ? viewModel.teams[viewModel.currentTeamIndex] : nil
@@ -20,6 +21,7 @@ struct GameplayView: View {
                 .ignoresSafeArea()
 
             VStack(spacing: 16) {
+                closeButtonRow
                 header
                 cardArea
                 actionButtons
@@ -37,6 +39,22 @@ struct GameplayView: View {
             default:
                 break
             }
+        }
+    }
+
+    private var closeButtonRow: some View {
+        HStack {
+            Button(action: onClose) {
+                Text("✕")
+                    .font(.system(size: 14, weight: .heavy))
+                    .foregroundStyle(AppTheme.Colors.textOnBrand)
+                    .frame(width: 28, height: 28)
+                    .background(.white.opacity(0.20))
+                    .clipShape(Circle())
+            }
+            .accessibilityLabel("Oyunu kapat")
+
+            Spacer(minLength: 0)
         }
     }
 
@@ -150,5 +168,5 @@ struct GameplayView: View {
         settings: GameSettings()
     )
     vm.startRound()
-    return GameplayView(viewModel: vm)
+    return GameplayView(viewModel: vm, onClose: {})
 }
