@@ -94,21 +94,25 @@ enum AppTheme {
     // MARK: - Tipografi
 
     enum Fonts {
-        // PostScript adları (gwfh static extraction'ı ad ailesini böyle üretiyor;
-        // dosyaların içeriği doğru ağırlıklarda).
-        private static let fredokaSemiBold = "FredokaLight-SemiBold"
-        private static let fredokaBold = "FredokaLight-Bold"
+        // PostScript adları.
+        // NOT: Başlık ailesi görsel olarak Fredoka'ya benzeyen Baloo 2 — Fredoka'da
+        // ğ/Ğ/İ/ş/Ş glyph'leri hiç yok (Google Fonts'taki orijinalinde de eksik, bizim
+        // çıkarma sürecimizden kaynaklanmıyordu), Türkçe metinde sessizce sistem fontuna
+        // düşüp tutarsız görünüyordu. fredoka/fredokaFixed adları riski azaltmak için
+        // korundu (16 çağrı noktası) ama artık Baloo 2 render ediyor.
+        private static let fredokaSemiBold = "Baloo2-SemiBold"
+        private static let fredokaBold = "Baloo2-Bold"
         private static let nunitoSemiBold = "NunitoSans12ptExtraLight12pt-SemiBold"
         private static let nunitoBold = "NunitoSans12ptExtraLight12pt-Bold"
         private static let nunitoExtraBold = "NunitoSans12ptExtraLight12pt-ExtraBold"
         private static let nunitoBlack = "NunitoSans12ptExtraLight12pt-Black"
 
-        /// Başlık ailesi — Fredoka. Dynamic Type'a göre ölçeklenir (relativeTo).
+        /// Başlık ailesi — Baloo 2 (bkz. yukarıdaki not). Dynamic Type'a göre ölçeklenir (relativeTo).
         static func fredoka(_ size: CGFloat, weight: Font.Weight = .bold, relativeTo textStyle: Font.TextStyle = .body) -> Font {
             .custom(weight == .semibold ? fredokaSemiBold : fredokaBold, size: size, relativeTo: textStyle)
         }
 
-        /// Sabit boyutlu Fredoka — dar/sabit alanlarda (ör. TimerRingView'ın 62x62 dairesi)
+        /// Sabit boyutlu başlık ailesi — dar/sabit alanlarda (ör. TimerRingView'ın 62x62 dairesi)
         /// Dynamic Type büyümesinin taşmaya yol açacağı yerler için.
         static func fredokaFixed(_ size: CGFloat, weight: Font.Weight = .bold) -> Font {
             .custom(weight == .semibold ? fredokaSemiBold : fredokaBold, fixedSize: size)
