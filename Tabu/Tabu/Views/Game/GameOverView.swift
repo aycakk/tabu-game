@@ -51,6 +51,8 @@ struct GameOverView: View {
                 .font(AppTheme.Fonts.fredoka(40))
                 .foregroundStyle(winnerColor)
                 .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .minimumScaleFactor(0.5)
 
             Text("kazandı!")
                 .font(AppTheme.Fonts.nunitoSans(16, weight: .bold))

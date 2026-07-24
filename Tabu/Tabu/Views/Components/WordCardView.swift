@@ -26,6 +26,9 @@ struct WordCardView: View {
                 .font(AppTheme.Fonts.cardWord)
                 .foregroundStyle(AppTheme.Colors.textOnBrand)
                 .tracking(-1)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .minimumScaleFactor(0.5)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 30)

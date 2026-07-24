@@ -53,6 +53,8 @@ struct PreRoundView: View {
                 .font(AppTheme.Fonts.roundTeamTitle)
                 .foregroundStyle(AppTheme.Colors.textOnBrand)
                 .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .minimumScaleFactor(0.5)
                 .tracking(-1.5)
                 .shadow(color: .black.opacity(0.18), radius: 15, y: 10)
                 .padding(.top, 22)
