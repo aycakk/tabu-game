@@ -7,6 +7,10 @@ enum SoundEffects {
         play(tickPlayer)
     }
 
+    static func pass() {
+        play(passPlayer)
+    }
+
     static func correct() {
         play(correctPlayer)
     }
@@ -26,6 +30,7 @@ enum SoundEffects {
     }()
 
     private static let tickPlayer = makePlayer(fileName: "tick")
+    private static let passPlayer = makePlayer(fileName: "pass_whoosh")
     private static let correctPlayer = makePlayer(fileName: "correct_ding")
     private static let roundEndPlayer = makePlayer(fileName: "round_end")
     private static let tabooPlayer = makePlayer(fileName: "taboo_buzz")

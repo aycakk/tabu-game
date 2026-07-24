@@ -106,6 +106,7 @@ struct GameplayView: View {
                     shadowColor: AppTheme.Colors.warning.opacity(0.6),
                     action: {
                         Haptics.selection()
+                        SoundEffects.pass()
                         viewModel.pass()
                     }
                 )
