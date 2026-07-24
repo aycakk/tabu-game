@@ -81,6 +81,16 @@ final class GameViewModel: ObservableObject {
         phase = .preRound
     }
 
+    /// Devam eden maçı iptal eder — geri sayım durur, ana menüye dönmek güvenli hale gelir.
+    /// (Aksi halde arka planda çalışan timer sessizce tick/endRound tetikleyip state değiştirmeye devam ederdi.)
+    func abandonGame() {
+        stopTimer()
+        phase = .setup
+        activeCard = nil
+        lastRoundResult = nil
+        winner = nil
+    }
+
     func startRound() {
         guard phase == .preRound, teams.indices.contains(currentTeamIndex), !deck.isEmpty else {
             return
