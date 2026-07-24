@@ -80,6 +80,9 @@ struct RoundSummaryView: View {
             Text(team.name)
                 .font(AppTheme.Fonts.fredoka(34))
                 .foregroundStyle(teamColor)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .minimumScaleFactor(0.5)
         }
         .frame(maxWidth: .infinity)
         .padding(.top, 6)

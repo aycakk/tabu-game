@@ -6,7 +6,6 @@ struct RootView: View {
     private enum Route: Equatable {
         case home
         case teamSetup
-        case howToPlay
         case game
     }
 
@@ -17,6 +16,8 @@ struct RootView: View {
     @State private var acknowledgedRoundResultID: UUID?
     /// Bu maç için MatchResult zaten kaydedildi mi (Tekrar Oyna'da yeniden false'a döner).
     @State private var didSaveMatchResult = false
+    /// Nasıl Oynanır artık ayrı bir "sayfa" değil — mevcut ekranın üzerinde native sheet olarak açılır.
+    @State private var isShowingHowToPlay = false
 
     private var currentTeam: Team? {
         gameViewModel.teams.indices.contains(gameViewModel.currentTeamIndex)
@@ -30,7 +31,7 @@ struct RootView: View {
             case .home:
                 HomeView(
                     onNewGame: { route = .teamSetup },
-                    onHowToPlay: { route = .howToPlay }
+                    onHowToPlay: { isShowingHowToPlay = true }
                 )
             case .teamSetup:
                 TeamSetupView(
@@ -41,13 +42,14 @@ struct RootView: View {
                         route = .game
                     }
                 )
-            case .howToPlay:
-                HowToPlayView(onClose: { route = .home })
             case .game:
                 gameContent
             }
         }
         .animation(.easeInOut(duration: 0.25), value: route)
+        .sheet(isPresented: $isShowingHowToPlay) {
+            HowToPlayView(onClose: { isShowingHowToPlay = false })
+        }
     }
 
     /// Faz + tur-özeti-onay durumunu tek bir Equatable anahtarda birleştirir (gameContent'in
@@ -71,7 +73,7 @@ struct RootView: View {
             // startNewGame doğrulaması başarısız olduysa (ör. boş deste) buraya düşer.
             HomeView(
                 onNewGame: { route = .teamSetup },
-                onHowToPlay: { route = .howToPlay }
+                onHowToPlay: { isShowingHowToPlay = true }
             )
             .onAppear { route = .home }
         case .preRound:
@@ -91,7 +93,7 @@ struct RootView: View {
             // GameViewModel şu an bu faza hiç geçmiyor (bkz. Tabu-Mimari.md); savunma amaçlı ana menüye dön.
             HomeView(
                 onNewGame: { route = .teamSetup },
-                onHowToPlay: { route = .howToPlay }
+                onHowToPlay: { isShowingHowToPlay = true }
             )
             .onAppear { route = .home }
         case .gameOver:
