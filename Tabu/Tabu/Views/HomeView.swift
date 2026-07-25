@@ -50,6 +50,7 @@ struct HomeView: View {
                             .clipShape(RoundedRectangle(cornerRadius: AppTheme.Corner.button))
                             .shadow(color: .black.opacity(0.28), radius: 19, y: 13)
                     }
+                    .buttonStyle(.pressable)
                     .scaleEffect(isButtonPulsing ? 1.035 : 1.0)
 
                     Button(action: onHowToPlay) {
@@ -61,6 +62,7 @@ struct HomeView: View {
                             .background(.white.opacity(0.20))
                             .clipShape(RoundedRectangle(cornerRadius: AppTheme.Corner.button))
                     }
+                    .buttonStyle(.pressable)
                 }
                 .padding(.horizontal, 28)
                 .padding(.bottom, 40)

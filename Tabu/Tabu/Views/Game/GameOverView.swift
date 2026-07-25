@@ -91,6 +91,7 @@ struct GameOverView: View {
                     .clipShape(RoundedRectangle(cornerRadius: AppTheme.Corner.button))
                     .shadow(color: AppTheme.Colors.brandMid.opacity(0.55), radius: 17, y: 9)
             }
+            .buttonStyle(.pressable)
 
             ShareLink(item: shareText) {
                 HStack(spacing: 8) {
@@ -104,6 +105,7 @@ struct GameOverView: View {
                 .background(AppTheme.Colors.accent.opacity(0.10))
                 .clipShape(RoundedRectangle(cornerRadius: AppTheme.Corner.button))
             }
+            .buttonStyle(.pressable)
 
             Button(action: onHome) {
                 Text("Ana Menü")
@@ -112,6 +114,7 @@ struct GameOverView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
             }
+            .buttonStyle(.pressable)
         }
         .padding(.horizontal, 22)
         .padding(.top, 14)
