@@ -111,7 +111,7 @@ struct GameplayView: View {
             }
         }
         .frame(maxHeight: .infinity)
-        .animation(.spring(response: 0.35, dampingFraction: 0.85), value: viewModel.activeCard?.id)
+        .animation(AppTheme.Motion.Spring.card, value: viewModel.activeCard?.id)
     }
 
     private var actionButtons: some View {

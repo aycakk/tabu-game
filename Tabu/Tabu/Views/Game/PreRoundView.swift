@@ -32,7 +32,7 @@ struct PreRoundView: View {
             }
         }
         .onAppear {
-            withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
+            withAnimation(AppTheme.Motion.Ambient.ctaPulse) {
                 isPulsing = true
             }
         }

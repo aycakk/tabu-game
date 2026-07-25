@@ -46,7 +46,7 @@ struct RootView: View {
                 gameContent
             }
         }
-        .animation(.easeInOut(duration: 0.25), value: route)
+        .animation(AppTheme.Motion.Curve.standard, value: route)
         .sheet(isPresented: $isShowingHowToPlay) {
             HowToPlayView(onClose: { isShowingHowToPlay = false })
         }
@@ -63,7 +63,7 @@ struct RootView: View {
         Group {
             gameContentSwitch
         }
-        .animation(.easeInOut(duration: 0.25), value: gameContentAnimationKey)
+        .animation(AppTheme.Motion.Curve.standard, value: gameContentAnimationKey)
     }
 
     @ViewBuilder
