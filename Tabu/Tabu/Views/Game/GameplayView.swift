@@ -52,6 +52,7 @@ struct GameplayView: View {
                     .background(.white.opacity(0.20))
                     .clipShape(Circle())
             }
+            .buttonStyle(.circularIcon)
             .accessibilityLabel("Oyunu kapat")
 
             Spacer(minLength: 0)
@@ -122,6 +123,7 @@ struct GameplayView: View {
                     subtitle: "\(viewModel.settings.passLimit - viewModel.currentPasses) kaldı",
                     backgroundColor: AppTheme.Colors.warning,
                     shadowColor: AppTheme.Colors.warning.opacity(0.6),
+                    kind: .pass,
                     action: {
                         Haptics.selection()
                         SoundEffects.pass()
@@ -135,6 +137,7 @@ struct GameplayView: View {
                     subtitle: "−\(viewModel.settings.tabooPenalty) puan",
                     backgroundColor: AppTheme.Colors.danger,
                     shadowColor: AppTheme.Colors.danger.opacity(0.6),
+                    kind: .taboo,
                     action: {
                         Haptics.error()
                         SoundEffects.taboo()
@@ -148,6 +151,7 @@ struct GameplayView: View {
                 glyph: "✓",
                 backgroundColor: AppTheme.Colors.success,
                 shadowColor: AppTheme.Colors.success.opacity(0.65),
+                kind: .correct,
                 action: {
                     Haptics.success()
                     SoundEffects.correct()

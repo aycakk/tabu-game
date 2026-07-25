@@ -39,6 +39,7 @@ struct HowToPlayView: View {
                 Button("Kapat", action: onClose)
                     .font(AppTheme.Fonts.nunitoSans(14, weight: .heavy))
                     .foregroundStyle(AppTheme.Colors.accent)
+                    .buttonStyle(.pressable)
             }
             .padding(.horizontal, 22)
             .padding(.top, 14)
@@ -63,6 +64,7 @@ struct HowToPlayView: View {
                     .clipShape(RoundedRectangle(cornerRadius: AppTheme.Corner.button))
                     .shadow(color: AppTheme.Colors.brandMid.opacity(0.55), radius: 16, y: 8)
             }
+            .buttonStyle(.pressable)
             .padding(.horizontal, 22)
             .padding(.top, 12)
             .padding(.bottom, 26)

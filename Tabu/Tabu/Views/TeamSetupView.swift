@@ -78,6 +78,7 @@ struct TeamSetupView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 14))
                     .shadow(color: .black.opacity(0.25), radius: 10, y: 4)
             }
+            .buttonStyle(.circularIcon)
 
             Spacer()
 
@@ -133,7 +134,10 @@ struct TeamSetupView: View {
                     )
                     .onTapGesture {
                         guard hex != disabledColorHex else { return }
-                        selectedColorHex.wrappedValue = hex
+                        Haptics.selection()
+                        withAnimation(AppTheme.Motion.Spring.snappy) {
+                            selectedColorHex.wrappedValue = hex
+                        }
                     }
                     .accessibilityLabel(colorName(for: hex))
                     .accessibilityAddTraits(
@@ -162,6 +166,7 @@ struct TeamSetupView: View {
             }
         }
         .shadow(color: isSelected ? Color(hex: hex).opacity(0.8) : .clear, radius: 8, y: 4)
+        .animation(AppTheme.Motion.Spring.snappy, value: isSelected)
     }
 
     private func colorName(for hex: String) -> String {
@@ -258,6 +263,8 @@ struct TeamSetupView: View {
                         .font(AppTheme.Fonts.fredoka(22))
                         .foregroundStyle(AppTheme.Colors.accent)
                         .frame(minWidth: 34)
+                        .contentTransition(.numericText(value: Double(value)))
+                        .animation(AppTheme.Motion.Spring.snappy, value: value)
 
                     stepperButton(
                         glyph: "+",
@@ -288,7 +295,10 @@ struct TeamSetupView: View {
         isEnabled: Bool,
         action: @escaping () -> Void
     ) -> some View {
-        Button(action: action) {
+        Button {
+            Haptics.selection()
+            action()
+        } label: {
             Text(glyph)
                 .font(AppTheme.Fonts.fredoka(20, weight: .semibold))
                 .foregroundStyle(foregroundColor)
@@ -296,6 +306,7 @@ struct TeamSetupView: View {
                 .background(backgroundColor)
                 .clipShape(Circle())
         }
+        .buttonStyle(.circularIcon)
         .disabled(!isEnabled)
         .opacity(isEnabled ? 1 : 0.4)
         .accessibilityLabel(label)
@@ -320,6 +331,7 @@ struct TeamSetupView: View {
                 .clipShape(RoundedRectangle(cornerRadius: AppTheme.Corner.button))
                 .shadow(color: AppTheme.Colors.brandMid.opacity(0.55), radius: 17, y: 9)
         }
+        .buttonStyle(.pressable)
         .disabled(!canStart)
         .opacity(canStart ? 1 : 0.5)
         .padding(.horizontal, 20)

@@ -57,6 +57,7 @@ struct RoundSummaryView: View {
                     .clipShape(Circle())
                     .shadow(color: .black.opacity(0.10), radius: 8, y: 4)
             }
+            .buttonStyle(.circularIcon)
             .accessibilityLabel("Kapat")
 
             Spacer(minLength: 0)
@@ -156,6 +157,7 @@ struct RoundSummaryView: View {
                 .clipShape(RoundedRectangle(cornerRadius: AppTheme.Corner.button))
                 .shadow(color: AppTheme.Colors.textPrimary.opacity(0.55), radius: 16, y: 8)
         }
+        .buttonStyle(.pressable)
         .padding(.horizontal, 22)
         .padding(.top, 14)
         .padding(.bottom, 28)

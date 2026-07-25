@@ -77,6 +77,7 @@ struct PreRoundView: View {
                 .background(.white.opacity(0.20))
                 .clipShape(Circle())
         }
+        .buttonStyle(.circularIcon)
         .accessibilityLabel("Kapat")
     }
 
@@ -91,6 +92,7 @@ struct PreRoundView: View {
                 .background(AppTheme.Colors.card)
                 .clipShape(RoundedRectangle(cornerRadius: AppTheme.Corner.button))
         }
+        .buttonStyle(.pressable)
         .scaleEffect(isPulsing ? 1.035 : 1.0)
     }
 }
