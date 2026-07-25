@@ -33,6 +33,7 @@ struct ConfettiView: View {
                         )
                 }
             }
+            .drawingGroup()
         }
         .allowsHitTesting(false)
         .accessibilityHidden(true)
