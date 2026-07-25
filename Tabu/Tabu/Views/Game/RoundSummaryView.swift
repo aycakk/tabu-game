@@ -6,6 +6,8 @@ struct RoundSummaryView: View {
     let result: RoundResult
     let scoreRows: [ScoreBoardView.Row]
     var isSuddenDeath: Bool = false
+    /// Oyun Sonu'na geçerken skor satırlarının sürekliliğini sağlayan paylaşılan namespace.
+    var scoreNamespace: Namespace.ID? = nil
     var onContinue: () -> Void
     var onClose: () -> Void
 
@@ -142,7 +144,7 @@ struct RoundSummaryView: View {
                 .tracking(1.5)
                 .foregroundStyle(AppTheme.Colors.textMuted)
 
-            ScoreBoardView(rows: scoreRows)
+            ScoreBoardView(rows: scoreRows, namespace: scoreNamespace)
         }
     }
 

@@ -3,21 +3,28 @@ import SwiftData
 
 /// Kök yönlendirme: home → kurulum → oyun → (kapat/ana menü ile) çıkış.
 struct RootView: View {
-    private enum Route: Equatable {
-        case home
-        case teamSetup
-        case game
+    /// rawValue sırası, home→teamSetup→game "ileri" yönünü tanımlıyor — geçiş yönünü buradan türetiyoruz.
+    private enum Route: Int, Equatable, Comparable {
+        case home = 0
+        case teamSetup = 1
+        case game = 2
+
+        static func < (lhs: Route, rhs: Route) -> Bool { lhs.rawValue < rhs.rawValue }
     }
 
     @Environment(\.modelContext) private var modelContext
     @StateObject private var gameViewModel = GameViewModel()
     @State private var route: Route = .home
+    /// route değişiminin yönü — Home↔TeamSetup geçişinin hangi taraftan kayacağını belirler.
+    @State private var isNavigatingForward = true
     /// "Devam"a basılana kadar hangi tur özetinin gösterildiğini takip eder.
     @State private var acknowledgedRoundResultID: UUID?
     /// Bu maç için MatchResult zaten kaydedildi mi (Tekrar Oyna'da yeniden false'a döner).
     @State private var didSaveMatchResult = false
     /// Nasıl Oynanır artık ayrı bir "sayfa" değil — mevcut ekranın üzerinde native sheet olarak açılır.
     @State private var isShowingHowToPlay = false
+    /// Tur Sonu → Oyun Sonu skor tablosu sürekliliği için (bkz. ScoreBoardView.matchedGeometryEffect).
+    @Namespace private var scoreNamespace
 
     private var currentTeam: Team? {
         gameViewModel.teams.indices.contains(gameViewModel.currentTeamIndex)
@@ -33,6 +40,7 @@ struct RootView: View {
                     onNewGame: { route = .teamSetup },
                     onHowToPlay: { isShowingHowToPlay = true }
                 )
+                .transition(directionalTransition)
             case .teamSetup:
                 TeamSetupView(
                     onBack: { route = .home },
@@ -42,14 +50,32 @@ struct RootView: View {
                         route = .game
                     }
                 )
+                .transition(directionalTransition)
             case .game:
                 gameContent
+                    .transition(.scale(scale: 0.96).combined(with: .opacity))
             }
         }
         .animation(AppTheme.Motion.Curve.standard, value: route)
+        .onChange(of: route) { oldValue, newValue in
+            isNavigatingForward = newValue > oldValue
+        }
         .sheet(isPresented: $isShowingHowToPlay) {
             HowToPlayView(onClose: { isShowingHowToPlay = false })
         }
+    }
+
+    /// Home↔TeamSetup arası yön duyarlı kayma — ileri giderken sağdan, geri dönerken soldan.
+    private var directionalTransition: AnyTransition {
+        isNavigatingForward
+            ? .asymmetric(
+                insertion: .move(edge: .trailing).combined(with: .opacity),
+                removal: .move(edge: .leading).combined(with: .opacity)
+            )
+            : .asymmetric(
+                insertion: .move(edge: .leading).combined(with: .opacity),
+                removal: .move(edge: .trailing).combined(with: .opacity)
+            )
     }
 
     /// Faz + tur-özeti-onay durumunu tek bir Equatable anahtarda birleştirir (gameContent'in
@@ -104,6 +130,7 @@ struct RootView: View {
                 GameOverView(
                     winner: winner,
                     scoreRows: finalScoreRows(winnerID: winner.id),
+                    scoreNamespace: scoreNamespace,
                     onPlayAgain: {
                         didSaveMatchResult = false
                         gameViewModel.startNewGame(teams: gameViewModel.teams, settings: gameViewModel.settings)
@@ -148,6 +175,7 @@ struct RootView: View {
             result: pending.result,
             scoreRows: roundSummaryRows(playedTeamID: pending.team.id),
             isSuddenDeath: isSuddenDeathRound(pending.result),
+            scoreNamespace: scoreNamespace,
             onContinue: { acknowledgedRoundResultID = pending.result.id },
             onClose: { exitToHome() }
         )

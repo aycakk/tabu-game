@@ -12,6 +12,9 @@ struct ScoreBoardView: View {
     }
 
     let rows: [Row]
+    /// Verilirse satırlar bu namespace üzerinden matchedGeometryEffect kullanır — Tur Sonu'ndan
+    /// Oyun Sonu'na geçerken aynı takımın satırı "uçarak" devam ediyormuş hissi verir.
+    var namespace: Namespace.ID? = nil
 
     var body: some View {
         VStack(spacing: 10) {
@@ -21,7 +24,16 @@ struct ScoreBoardView: View {
         }
     }
 
+    @ViewBuilder
     private func rowView(_ row: Row) -> some View {
+        if let namespace {
+            rowContent(row).matchedGeometryEffect(id: row.team.id, in: namespace)
+        } else {
+            rowContent(row)
+        }
+    }
+
+    private func rowContent(_ row: Row) -> some View {
         let teamColor = Color(hex: row.team.colorHex)
 
         return HStack(spacing: 14) {

@@ -5,6 +5,8 @@ import SwiftUI
 struct GameOverView: View {
     let winner: Team
     let scoreRows: [ScoreBoardView.Row]
+    /// RoundSummaryView'daki skor satırlarıyla süreklilik kurmak için paylaşılan namespace.
+    var scoreNamespace: Namespace.ID? = nil
     var onPlayAgain: () -> Void
     var onHome: () -> Void
 
@@ -75,7 +77,7 @@ struct GameOverView: View {
                 .tracking(1.5)
                 .foregroundStyle(AppTheme.Colors.textMuted)
 
-            ScoreBoardView(rows: scoreRows)
+            ScoreBoardView(rows: scoreRows, namespace: scoreNamespace)
         }
     }
 
