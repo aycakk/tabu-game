@@ -126,7 +126,7 @@ struct TeamSetupView: View {
             .padding(.bottom, 16)
 
             HStack {
-                ForEach(AppTheme.TeamColors.swatches, id: \.self) { hex in
+                ForEach(Array(AppTheme.TeamColors.swatches.enumerated()), id: \.element) { index, hex in
                     swatch(
                         hex: hex,
                         isSelected: hex == selectedColorHex.wrappedValue,
@@ -143,6 +143,7 @@ struct TeamSetupView: View {
                     .accessibilityAddTraits(
                         hex == selectedColorHex.wrappedValue ? [.isButton, .isSelected] : .isButton
                     )
+                    .staggerAppear(index: index)
                 }
             }
         }

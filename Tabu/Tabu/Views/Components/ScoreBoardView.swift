@@ -15,11 +15,19 @@ struct ScoreBoardView: View {
     /// Verilirse satırlar bu namespace üzerinden matchedGeometryEffect kullanır — Tur Sonu'ndan
     /// Oyun Sonu'na geçerken aynı takımın satırı "uçarak" devam ediyormuş hissi verir.
     var namespace: Namespace.ID? = nil
+    /// matchedGeometryEffect'in "iniş" tarafında (Oyun Sonu) satırlar zaten uçarak geliyor —
+    /// üstüne bağımsız bir fade/offset stagger bindirmek o hareketi görünmez kılar. Sadece
+    /// normal (geçişe katılmayan) girişlerde true kalmalı.
+    var staggersAppearance: Bool = true
 
     var body: some View {
         VStack(spacing: 10) {
-            ForEach(rows) { row in
-                rowView(row)
+            ForEach(Array(rows.enumerated()), id: \.element.id) { index, row in
+                if staggersAppearance {
+                    rowView(row).staggerAppear(index: index)
+                } else {
+                    rowView(row)
+                }
             }
         }
     }

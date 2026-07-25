@@ -77,7 +77,7 @@ struct GameOverView: View {
                 .tracking(1.5)
                 .foregroundStyle(AppTheme.Colors.textMuted)
 
-            ScoreBoardView(rows: scoreRows, namespace: scoreNamespace)
+            ScoreBoardView(rows: scoreRows, namespace: scoreNamespace, staggersAppearance: false)
         }
     }
 

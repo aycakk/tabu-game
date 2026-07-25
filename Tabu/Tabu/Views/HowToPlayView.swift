@@ -49,6 +49,7 @@ struct HowToPlayView: View {
                 VStack(spacing: 6) {
                     ForEach(Array(items.enumerated()), id: \.offset) { index, item in
                         row(for: item, showsDivider: index < items.count - 1)
+                            .staggerAppear(index: index)
                     }
                 }
             }

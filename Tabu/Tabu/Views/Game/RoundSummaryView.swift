@@ -94,8 +94,11 @@ struct RoundSummaryView: View {
     private var statTiles: some View {
         HStack(spacing: 10) {
             statTile(value: result.correct, label: "DOĞRU", color: AppTheme.Colors.success)
+                .staggerAppear(index: 0)
             statTile(value: result.passes, label: "PAS", color: AppTheme.Colors.warning)
+                .staggerAppear(index: 1)
             statTile(value: result.taboos, label: "TABU", color: AppTheme.Colors.danger)
+                .staggerAppear(index: 2)
         }
     }
 
