@@ -54,7 +54,7 @@ final class GameViewModel: ObservableObject {
         self.settings = newSettings
 
         guard newTeams.count == 2 else {
-            failSetup(with: "MVP icin tam olarak iki takim gerekli.")
+            failSetup(with: "MVP için tam olarak iki takım gerekli.")
             return
         }
 
@@ -66,7 +66,7 @@ final class GameViewModel: ObservableObject {
         }
 
         guard !deck.isEmpty else {
-            failSetup(with: "Deste bos.")
+            failSetup(with: "Deste boş.")
             return
         }
 
