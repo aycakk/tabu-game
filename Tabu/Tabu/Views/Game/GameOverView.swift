@@ -12,6 +12,10 @@ struct GameOverView: View {
 
     private var winnerColor: Color { Color(hex: winner.colorHex) }
 
+    /// false→true değişimi PhaseAnimator'ı tetikler — winner.id gibi sabit bir değer hiç
+    /// değişmediği için sekansı hiç başlatmazdı (görüldüğü üzere ekran hep "hidden" fazında takılı kalıyordu).
+    @State private var hasAppeared = false
+
     private var shareText: String {
         let scoresText = scoreRows
             .map { "\($0.team.name): \($0.team.score)" }
@@ -62,12 +66,38 @@ struct GameOverView: View {
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
                 .minimumScaleFactor(0.5)
+                .phaseAnimator(WinnerPhase.allCases, trigger: hasAppeared) { view, phase in
+                    view
+                        .scaleEffect(phase.scale)
+                        .opacity(phase.opacity)
+                } animation: { _ in
+                    AppTheme.Motion.Spring.bouncy
+                }
 
             Text("kazandı!")
                 .font(AppTheme.Fonts.nunitoSans(16, weight: .bold))
                 .foregroundStyle(AppTheme.Colors.textMuted)
         }
         .frame(maxWidth: .infinity)
+        .onAppear {
+            Haptics.success()
+            hasAppeared = true
+        }
+    }
+
+    /// Kazanan ismi girişi: küçük+görünmez → hafif taşarak büyük → yerine oturur.
+    private enum WinnerPhase: CaseIterable {
+        case hidden, overshoot, settled
+
+        var scale: CGFloat {
+            switch self {
+            case .hidden: 0.6
+            case .overshoot: 1.12
+            case .settled: 1.0
+            }
+        }
+
+        var opacity: Double { self == .hidden ? 0 : 1 }
     }
 
     private var scoreBoardSection: some View {
