@@ -63,6 +63,24 @@ struct RootView: View {
         .sheet(isPresented: $isShowingHowToPlay) {
             HowToPlayView(onClose: { isShowingHowToPlay = false })
         }
+        .alert(
+            "Bir sorun oluştu",
+            isPresented: Binding(
+                get: { gameViewModel.errorMessage != nil },
+                set: { isPresented in
+                    if !isPresented { gameViewModel.errorMessage = nil }
+                }
+            )
+        ) {
+            Button("Tamam") { gameViewModel.errorMessage = nil }
+        } message: {
+            Text(gameViewModel.errorMessage ?? "")
+        }
+        .onChange(of: gameViewModel.errorMessage) { _, newValue in
+            if newValue != nil {
+                Haptics.error()
+            }
+        }
     }
 
     /// Home↔TeamSetup arası yön duyarlı kayma — ileri giderken sağdan, geri dönerken soldan.
