@@ -28,7 +28,7 @@ struct TimerRingView: View {
                 .trim(from: 0, to: progress)
                 .stroke(ringColor, style: StrokeStyle(lineWidth: 7, lineCap: .round))
                 .rotationEffect(.degrees(-90))
-                .animation(.linear(duration: 1), value: progress)
+                .animation(AppTheme.Motion.timerTickSweep, value: progress)
 
             Text("\(secondsRemaining)")
                 .font(AppTheme.Fonts.timer)
@@ -46,7 +46,7 @@ struct TimerRingView: View {
             return
         }
         guard !isPulsing else { return }
-        withAnimation(.easeInOut(duration: 0.5).repeatForever(autoreverses: true)) {
+        withAnimation(AppTheme.Motion.Ambient.timerUrgencyPulse) {
             isPulsing = true
         }
     }

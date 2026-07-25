@@ -54,8 +54,8 @@ struct ConfettiView: View {
                 color: colors[index % colors.count],
                 xFraction: CGFloat.random(in: 0...1),
                 size: CGFloat.random(in: 6...12),
-                delay: Double.random(in: 0...0.4),
-                duration: Double.random(in: 1.6...2.6),
+                delay: Double.random(in: AppTheme.Motion.Confetti.delayRange),
+                duration: Double.random(in: AppTheme.Motion.Confetti.durationRange),
                 rotation: Double.random(in: 180...720)
             )
         }

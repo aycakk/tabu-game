@@ -67,13 +67,13 @@ struct HomeView: View {
             }
         }
         .onAppear {
-            withAnimation(.linear(duration: 5).repeatForever(autoreverses: false)) {
+            withAnimation(AppTheme.Motion.Ambient.sparkleRotation) {
                 sparkleRotation = true
             }
-            withAnimation(.easeInOut(duration: 1.1).repeatForever(autoreverses: true)) {
+            withAnimation(AppTheme.Motion.Ambient.sparklePulse) {
                 sparklePulse = true
             }
-            withAnimation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true)) {
+            withAnimation(AppTheme.Motion.Ambient.ctaPulse) {
                 isButtonPulsing = true
             }
             // Her dairenin kendi .animation(_:value:) modifier'ı farklı süreyle çalışıyor,
