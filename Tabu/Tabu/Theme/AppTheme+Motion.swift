@@ -75,5 +75,17 @@ extension AppTheme {
         static func staggerDelay(index: Int, step: Double = 0.05, cap: Double = 0.4) -> Double {
             min(Double(index) * step, cap)
         }
+
+        // MARK: - Reduce Motion
+
+        /// reduceMotion açıkken orijinal transition yerine sade bir opacity cross-fade döner.
+        static func transition(_ full: AnyTransition, reduceMotion: Bool) -> AnyTransition {
+            reduceMotion ? .opacity : full
+        }
+
+        /// reduceMotion açıkken orijinal animasyon yerine kısa, sade bir fade döner.
+        static func animation(_ full: Animation, reduceMotion: Bool) -> Animation {
+            reduceMotion ? .easeInOut(duration: Duration.fast) : full
+        }
     }
 }

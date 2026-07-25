@@ -13,6 +13,7 @@ struct RootView: View {
     }
 
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @StateObject private var gameViewModel = GameViewModel()
     @State private var route: Route = .home
     /// route değişiminin yönü — Home↔TeamSetup geçişinin hangi taraftan kayacağını belirler.
@@ -40,7 +41,7 @@ struct RootView: View {
                     onNewGame: { route = .teamSetup },
                     onHowToPlay: { isShowingHowToPlay = true }
                 )
-                .transition(directionalTransition)
+                .transition(AppTheme.Motion.transition(directionalTransition, reduceMotion: reduceMotion))
             case .teamSetup:
                 TeamSetupView(
                     onBack: { route = .home },
@@ -50,13 +51,13 @@ struct RootView: View {
                         route = .game
                     }
                 )
-                .transition(directionalTransition)
+                .transition(AppTheme.Motion.transition(directionalTransition, reduceMotion: reduceMotion))
             case .game:
                 gameContent
-                    .transition(.scale(scale: 0.96).combined(with: .opacity))
+                    .transition(AppTheme.Motion.transition(.scale(scale: 0.96).combined(with: .opacity), reduceMotion: reduceMotion))
             }
         }
-        .animation(AppTheme.Motion.Curve.standard, value: route)
+        .animation(AppTheme.Motion.animation(AppTheme.Motion.Curve.standard, reduceMotion: reduceMotion), value: route)
         .onChange(of: route) { oldValue, newValue in
             isNavigatingForward = newValue > oldValue
         }
@@ -107,7 +108,7 @@ struct RootView: View {
         Group {
             gameContentSwitch
         }
-        .animation(AppTheme.Motion.Curve.standard, value: gameContentAnimationKey)
+        .animation(AppTheme.Motion.animation(AppTheme.Motion.Curve.standard, reduceMotion: reduceMotion), value: gameContentAnimationKey)
     }
 
     @ViewBuilder

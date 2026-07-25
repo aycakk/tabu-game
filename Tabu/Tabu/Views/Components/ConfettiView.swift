@@ -6,12 +6,15 @@ struct ConfettiView: View {
         let id = UUID()
         let color: Color
         let xFraction: CGFloat
+        /// Reduce Motion açıkken düşme yerine bu sabit yükseklikte, sadece fade-in ile belirir.
+        let restingYFraction: CGFloat
         let size: CGFloat
         let delay: Double
         let duration: Double
         let rotation: Double
     }
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var pieces: [Piece] = ConfettiView.makePieces()
     @State private var animate = false
 
@@ -24,11 +27,16 @@ struct ConfettiView: View {
                         .frame(width: piece.size, height: piece.size * 0.4)
                         .position(
                             x: piece.xFraction * geo.size.width,
-                            y: animate ? geo.size.height + 40 : -40
+                            y: reduceMotion
+                                ? piece.restingYFraction * geo.size.height
+                                : (animate ? geo.size.height + 40 : -40)
                         )
-                        .rotationEffect(.degrees(animate ? piece.rotation : 0))
+                        .rotationEffect(.degrees(reduceMotion ? 0 : (animate ? piece.rotation : 0)))
+                        .opacity(reduceMotion ? (animate ? 1 : 0) : 1)
                         .animation(
-                            .easeIn(duration: piece.duration).delay(piece.delay),
+                            reduceMotion
+                                ? AppTheme.Motion.Curve.gentle.delay(piece.delay)
+                                : .easeIn(duration: piece.duration).delay(piece.delay),
                             value: animate
                         )
                 }
@@ -54,6 +62,7 @@ struct ConfettiView: View {
             Piece(
                 color: colors[index % colors.count],
                 xFraction: CGFloat.random(in: 0...1),
+                restingYFraction: CGFloat.random(in: 0.05...0.6),
                 size: CGFloat.random(in: 6...12),
                 delay: Double.random(in: AppTheme.Motion.Confetti.delayRange),
                 duration: Double.random(in: AppTheme.Motion.Confetti.durationRange),
