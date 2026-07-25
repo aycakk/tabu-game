@@ -5,6 +5,11 @@ struct HomeView: View {
     var onNewGame: () -> Void
     var onHowToPlay: () -> Void
 
+    @State private var sparkleRotation = false
+    @State private var sparklePulse = false
+    @State private var circlesDrifting = false
+    @State private var isButtonPulsing = false
+
     var body: some View {
         ZStack {
             AppTheme.Gradients.brand
@@ -19,6 +24,8 @@ struct HomeView: View {
                     .font(.system(size: 30))
                     .foregroundStyle(AppTheme.Colors.accent)
                     .padding(.bottom, 18)
+                    .scaleEffect(sparklePulse ? 1.2 : 0.85)
+                    .rotationEffect(.degrees(sparkleRotation ? 360 : 0))
 
                 Text("TABU")
                     .font(AppTheme.Fonts.splashTitle)
@@ -43,6 +50,7 @@ struct HomeView: View {
                             .clipShape(RoundedRectangle(cornerRadius: AppTheme.Corner.button))
                             .shadow(color: .black.opacity(0.28), radius: 19, y: 13)
                     }
+                    .scaleEffect(isButtonPulsing ? 1.035 : 1.0)
 
                     Button(action: onHowToPlay) {
                         Text("Nasıl Oynanır?")
@@ -58,30 +66,41 @@ struct HomeView: View {
                 .padding(.bottom, 40)
             }
         }
+        .onAppear {
+            withAnimation(.linear(duration: 5).repeatForever(autoreverses: false)) {
+                sparkleRotation = true
+            }
+            withAnimation(.easeInOut(duration: 1.1).repeatForever(autoreverses: true)) {
+                sparklePulse = true
+            }
+            withAnimation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true)) {
+                isButtonPulsing = true
+            }
+            // Her dairenin kendi .animation(_:value:) modifier'ı farklı süreyle çalışıyor,
+            // burada sadece tetikliyoruz.
+            circlesDrifting = true
+        }
     }
 
     private var decorativeCircles: some View {
         GeometryReader { geo in
             ZStack {
-                Circle()
-                    .fill(.white.opacity(0.12))
-                    .frame(width: 300)
-                    .position(x: geo.size.width + 30, y: 60)
-                Circle()
-                    .fill(.white.opacity(0.10))
-                    .frame(width: 200)
-                    .position(x: 10, y: 230)
-                Circle()
-                    .fill(.white.opacity(0.08))
-                    .frame(width: 150)
-                    .position(x: geo.size.width + 15, y: geo.size.height - 275)
-                Circle()
-                    .fill(.white.opacity(0.10))
-                    .frame(width: 90, height: 90)
-                    .position(x: 75, y: geo.size.height - 345)
+                driftingCircle(size: 300, opacity: 0.12, x: geo.size.width + 30, y: 60, duration: 6)
+                driftingCircle(size: 200, opacity: 0.10, x: 10, y: 230, duration: 7.5)
+                driftingCircle(size: 150, opacity: 0.08, x: geo.size.width + 15, y: geo.size.height - 275, duration: 5.5)
+                driftingCircle(size: 90, opacity: 0.10, x: 75, y: geo.size.height - 345, duration: 8)
             }
         }
         .ignoresSafeArea()
+    }
+
+    private func driftingCircle(size: CGFloat, opacity: Double, x: CGFloat, y: CGFloat, duration: Double) -> some View {
+        Circle()
+            .fill(.white.opacity(opacity))
+            .frame(width: size)
+            .position(x: x, y: y)
+            .offset(y: circlesDrifting ? -14 : 14)
+            .animation(.easeInOut(duration: duration).repeatForever(autoreverses: true), value: circlesDrifting)
     }
 }
 
