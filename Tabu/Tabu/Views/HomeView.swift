@@ -5,6 +5,8 @@ struct HomeView: View {
     var onNewGame: () -> Void
     var onHowToPlay: () -> Void
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     @State private var sparkleRotation = false
     @State private var sparklePulse = false
     @State private var circlesDrifting = false
@@ -69,6 +71,9 @@ struct HomeView: View {
             }
         }
         .onAppear {
+            // Reduce Motion açıkken hiçbiri tetiklenmiyor — @State'ler false'ta kalıp
+            // view'lar zaten statik/dinlenme görünümlerinde render oluyor.
+            guard !reduceMotion else { return }
             withAnimation(AppTheme.Motion.Ambient.sparkleRotation) {
                 sparkleRotation = true
             }

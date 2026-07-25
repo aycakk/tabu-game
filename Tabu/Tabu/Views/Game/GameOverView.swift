@@ -12,6 +12,8 @@ struct GameOverView: View {
 
     private var winnerColor: Color { Color(hex: winner.colorHex) }
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     /// false→true değişimi PhaseAnimator'ı tetikler — winner.id gibi sabit bir değer hiç
     /// değişmediği için sekansı hiç başlatmazdı (görüldüğü üzere ekran hep "hidden" fazında takılı kalıyordu).
     @State private var hasAppeared = false
@@ -68,10 +70,11 @@ struct GameOverView: View {
                 .minimumScaleFactor(0.5)
                 .phaseAnimator(WinnerPhase.allCases, trigger: hasAppeared) { view, phase in
                     view
-                        .scaleEffect(phase.scale)
+                        // Reduce Motion'da overshoot atlanır, sadece opacity ile düz fade-in kalır.
+                        .scaleEffect(reduceMotion ? 1.0 : phase.scale)
                         .opacity(phase.opacity)
                 } animation: { _ in
-                    AppTheme.Motion.Spring.bouncy
+                    reduceMotion ? AppTheme.Motion.Curve.quick : AppTheme.Motion.Spring.bouncy
                 }
 
             Text("kazandı!")

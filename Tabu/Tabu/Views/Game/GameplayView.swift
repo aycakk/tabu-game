@@ -5,6 +5,8 @@ struct GameplayView: View {
     @ObservedObject var viewModel: GameViewModel
     var onClose: () -> Void
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     private var currentTeam: Team? {
         viewModel.teams.indices.contains(viewModel.currentTeamIndex) ? viewModel.teams[viewModel.currentTeamIndex] : nil
     }
@@ -105,14 +107,17 @@ struct GameplayView: View {
             if let card = viewModel.activeCard {
                 WordCardView(card: card, teamColorHex: currentTeam?.colorHex ?? AppTheme.TeamColors.defaultTeam1)
                     .id(card.id)
-                    .transition(.asymmetric(
-                        insertion: .move(edge: .trailing).combined(with: .opacity),
-                        removal: .move(edge: .leading).combined(with: .opacity)
+                    .transition(AppTheme.Motion.transition(
+                        .asymmetric(
+                            insertion: .move(edge: .trailing).combined(with: .opacity),
+                            removal: .move(edge: .leading).combined(with: .opacity)
+                        ),
+                        reduceMotion: reduceMotion
                     ))
             }
         }
         .frame(maxHeight: .infinity)
-        .animation(AppTheme.Motion.Spring.card, value: viewModel.activeCard?.id)
+        .animation(AppTheme.Motion.animation(AppTheme.Motion.Spring.card, reduceMotion: reduceMotion), value: viewModel.activeCard?.id)
     }
 
     private var actionButtons: some View {

@@ -7,6 +7,7 @@ struct PreRoundView: View {
     var onStart: () -> Void
     var onClose: () -> Void
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var isPulsing = false
 
     var body: some View {
@@ -32,6 +33,7 @@ struct PreRoundView: View {
             }
         }
         .onAppear {
+            guard !reduceMotion else { return }
             withAnimation(AppTheme.Motion.Ambient.ctaPulse) {
                 isPulsing = true
             }

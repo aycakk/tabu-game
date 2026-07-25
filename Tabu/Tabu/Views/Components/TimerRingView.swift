@@ -6,6 +6,7 @@ struct TimerRingView: View {
     let secondsRemaining: Int
     let totalSeconds: Int
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var isPulsing = false
 
     private var progress: Double {
@@ -41,7 +42,9 @@ struct TimerRingView: View {
     }
 
     private func updatePulseState() {
-        guard isUrgent else {
+        // Sweep (progress) ve kırmızı renk değişimi bilgi taşıyor, dekoratif değil —
+        // sadece bu döngüsel nabız Reduce Motion ile gate ediliyor.
+        guard isUrgent, !reduceMotion else {
             isPulsing = false
             return
         }
