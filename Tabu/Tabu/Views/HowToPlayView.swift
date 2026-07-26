@@ -76,23 +76,27 @@ struct HowToPlayView: View {
 
     private func row(for item: Item, showsDivider: Bool) -> some View {
         VStack(spacing: 0) {
-            HStack(alignment: .top, spacing: 14) {
-                Text(item.icon)
-                    .font(.system(size: 21))
-                    .frame(width: 42, height: 42)
-                    .background(Color(hex: item.tintHex).opacity(0.12))
-                    .clipShape(RoundedRectangle(cornerRadius: 14))
-                    .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 6) {
+                HStack(spacing: 10) {
+                    Text(item.icon)
+                        .font(.system(size: 21))
+                        .frame(width: 42, height: 42)
+                        .background(Color(hex: item.tintHex).opacity(0.12))
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                        .accessibilityHidden(true)
 
-                VStack(alignment: .leading, spacing: 2) {
                     Text(item.title)
                         .font(AppTheme.Fonts.nunitoSans(15, weight: .heavy))
                         .foregroundStyle(AppTheme.Colors.textPrimary)
-                    Text(item.description)
-                        .font(AppTheme.Fonts.nunitoSans(13))
-                        .foregroundStyle(AppTheme.Colors.textMuted)
-                        .lineSpacing(3)
                 }
+
+                // Açıklama artık ikonun yanına sıkışmadan, başlığın altında tam genişlikte —
+                // her satırda başlık ve açıklama aynı sol kenara hizalı.
+                Text(item.description)
+                    .font(AppTheme.Fonts.nunitoSans(13))
+                    .foregroundStyle(AppTheme.Colors.textMuted)
+                    .lineSpacing(3)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.vertical, 13)
             .accessibilityElement(children: .combine)
