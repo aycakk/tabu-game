@@ -37,18 +37,19 @@ struct WordCardView: View {
     }
 
     private var forbiddenList: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(spacing: 10) {
             Text("YASAK KELİMELER")
                 .font(AppTheme.Fonts.overline)
                 .tracking(1.5)
                 .foregroundStyle(AppTheme.Colors.textMuted)
+                .frame(maxWidth: .infinity, alignment: .center)
 
             VStack(spacing: 0) {
                 ForEach(Array(card.forbidden.enumerated()), id: \.offset) { index, word in
                     Text(word.uppercased())
                         .font(AppTheme.Fonts.nunitoSans(18, weight: .heavy))
                         .foregroundStyle(AppTheme.Colors.textPrimary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.vertical, 11)
                         .accessibilityLabel("Yasak: \(word)")
 
