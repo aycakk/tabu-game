@@ -37,36 +37,31 @@ struct WordCardView: View {
     }
 
     private var forbiddenList: some View {
-        VStack(spacing: 0) {
-            ForEach(Array(card.forbidden.enumerated()), id: \.offset) { index, word in
-                HStack(spacing: 12) {
-                    ZStack {
-                        Circle()
-                            .fill(AppTheme.Colors.dangerBg)
-                            .frame(width: 22, height: 22)
-                        Text("✕")
-                            .font(.system(size: 12, weight: .black))
-                            .foregroundStyle(AppTheme.Colors.danger)
-                    }
-                    .accessibilityHidden(true)
+        VStack(alignment: .leading, spacing: 10) {
+            Text("YASAK KELİMELER")
+                .font(AppTheme.Fonts.overline)
+                .tracking(1.5)
+                .foregroundStyle(AppTheme.Colors.textMuted)
 
+            VStack(spacing: 0) {
+                ForEach(Array(card.forbidden.enumerated()), id: \.offset) { index, word in
                     Text(word.uppercased())
                         .font(AppTheme.Fonts.nunitoSans(18, weight: .heavy))
                         .foregroundStyle(AppTheme.Colors.textPrimary)
-                }
-                .padding(.vertical, 11)
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel("Yasak: \(word)")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical, 11)
+                        .accessibilityLabel("Yasak: \(word)")
 
-                if index < card.forbidden.count - 1 {
-                    Rectangle()
-                        .fill(AppTheme.Colors.divider)
-                        .frame(height: 1)
+                    if index < card.forbidden.count - 1 {
+                        Rectangle()
+                            .fill(AppTheme.Colors.divider)
+                            .frame(height: 1)
+                    }
                 }
             }
         }
         .padding(.horizontal, 20)
-        .padding(.top, 10)
+        .padding(.top, 14)
         .padding(.bottom, 16)
     }
 }
